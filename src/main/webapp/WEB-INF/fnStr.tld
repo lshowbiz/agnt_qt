@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+  
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"  
+    version="2.0">  
+       
+    <description>StringUtils</description>  
+    <tlib-version>1.0</tlib-version>  
+    <short-name>SubStrLength</short-name>  
+    <uri>http://jstl.abbreviate.strl</uri>  
+  
+    <function>  
+        <description>SubStrLength</description>  
+        <name>abbreviate</name>  
+        <function-class>com.joymain.ng.util.jstl.SubStrLength</function-class>  
+        <function-signature>java.lang.String abbreviate(java.lang.String, int, java.lang.String)</function-signature>       
+    </function>
+    <function>  
+        <description>isAbbreviate</description>  
+        <name>isAbbreviate</name>  
+        <function-class>com.joymain.ng.util.jstl.SubStrLength</function-class>  
+        <function-signature>java.lang.Boolean isAbbreviate(java.lang.String, int)</function-signature>       
+    </function>  
+</taglib> 

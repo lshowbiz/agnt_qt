@@ -1,0 +1,56 @@
+table.tree_grid {
+	font-weight: normal;
+	border-collapse:collapse;
+}
+
+table.tree_grid th {
+    text-align: center;
+    padding:4px;
+	color: Black;
+	background-color: #f0f0f0;
+	white-space: nowrap;
+	border: 1px solid #dadada;
+	font-weight: normal;
+}
+
+table.tree_grid td {
+    padding-top:0px;
+	padding-bottom:0px;
+	padding-left:4px;
+	padding-right:4px;
+	margin:0px;
+	white-space: nowrap;
+	border:1px solid #dadada;border-top-color:#fff;
+}
+
+table.tree_grid .collapsed { 
+	display: none; 
+}
+table.tree_grid .ttimage, table.tree_grid .parimg, table.tree_grid .preimg { 
+	border: none; 
+	margin: 0px; 
+	padding: 0px; 
+	vertical-align: bottom; 
+	width: 18px; 
+	height: 18px; 
+}
+
+table.tree_grid .even { 
+	background-color: #fafafa; 
+}
+
+table.tree_grid .over { 
+	background-color: #efefef; 
+}
+
+table.tree_grid .selected { 
+	background-color: #ddf; 
+}
+
+table.tree_grid .numberColumn {
+	text-align: right;
+}
+
+table.tree_grid .centerColumn {
+	text-align: center;
+}

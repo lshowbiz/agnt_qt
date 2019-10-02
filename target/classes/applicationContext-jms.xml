@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+     <!-- 独立部署的activeMQ  -->
+     <!-- 加入wireFormat.maxInactivityDuration=0 这样的参数，避免ActiveMQ在一段时间没有消息发送时抛出 "Channel was inactive for too long"异常 -->
+    <amq:connectionFactory id="simpleJmsConnectionFactory" brokerURL="tcp://192.168.5.222:61616?wireFormat.maxInactivityDuration=0"/>
+    
+     <!--  Message 转换器  -->
+    <bean id="activeMqMessageConverter" class="com.joymain.activemq.ActiveMqMessageConverter"/>
+    
+    <!--  Spring Jms模板 -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory">
+            <bean class="org.springframework.jms.connection.SingleConnectionFactory">
+                <!-- 采用普通jms连接工厂 -->
+                <property name="targetConnectionFactory" ref="simpleJmsConnectionFactory"/>
+            </bean>
+        </property>
+        <property name="messageConverter" ref="activeMqMessageConverter"/>
+    </bean>
+    
+    <!-- 用于发送消息的队列 -->
+    <amq:queue id="jecsMessageQueue" name="jecsMessageQueue" physicalName="jecsMessageQueue" />
+    
+    <!-- 用于接收消息的队列  -->
+    <amq:queue id="htMessageQueue" name="htMessageQueue" physicalName="htMessageQueue" />
+    
+    <amq:queue id="orderMessageQueue" name="orderMessageQueue" physicalName="orderMessageQueue" />
+    
+    <!-- 消息生产者   	-->
+    <bean id="messageProducer" class="com.joymain.activemq.MessageProducer">
+    	<property name="messageQueue" ref="orderMessageQueue"/>
+    	<property name="jmsTemplate" ref="jmsTemplate"/>
+    </bean>
+  
+    <!-- 
+    	消息消费者 
+    	map配置的是队列中消息处理类。
+    	键：队列中消息类 对应的类 全路径 如： com.sf.core.model.MailModel
+    	值：消息处理类,需要实现接口类IJmsHandler 。如：com.sf.platform.service.jms.impl.MailHandler 
+    	用户也可以配置自己的处理方式，配置到这里。
+     -->   
+    
+    <bean name="messageConsumer" class="com.joymain.activemq.MessageConsumer">
+		<property name="handlers">
+			<map>
+<!-- 				<entry  key="com.joymain.activemq.InnerMessage"> -->
+<!-- 					<bean class="com.joymain.activemq.InnerHandler"></bean> -->
+<!-- 				</entry> -->
+				<entry  key="com.joymain.activemq.JpoMemberOrderCheckModel">
+					<bean class="com.joymain.activemq.JpoMemberOrderCheckModelHandler"></bean>
+				</entry>
+				<entry  key="java.util.HashMap">
+					<bean class="com.joymain.activemq.MapHandler"></bean>
+				</entry>
+			</map>
+		</property> 
+    </bean>
+    
+    <!--消息监听容器 --> 
+	<bean id="messageListenerContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="simpleJmsConnectionFactory" />
+		<property name="destination" ref="orderMessageQueue" />
+		<property name="messageListener" ref="messageMsgListener" />
+	</bean>
+    
+    <!-- 邮件消息消费监听器  --> 
+	<bean id="messageMsgListener" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<constructor-arg>
+			<ref bean="messageConsumer"/>		
+		</constructor-arg>
+		<property name="messageConverter" ref="activeMqMessageConverter" />
+		<property name="defaultListenerMethod" value="handMessage" />
+	</bean>
+
+</beans>	

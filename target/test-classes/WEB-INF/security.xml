@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	<http pattern="/druid/**" security="none" />
+	<http pattern="/images/**" security="none" />
+	<http pattern="/**/*.jpg" security="none" />
+	<http pattern="/app/nosec/**" security="none" />
+	<http pattern="/styles/**" security="none" />
+	<http pattern="/scripts/**" security="none" />
+	<http pattern="/ckeditor/**" security="none" />
+	<http pattern="/app/*/api/**" security="none" />
+	<http pattern="/app/passwordReset*" security="none" />
+	<http pattern="/app/passwordReset/generateverifycode" security="none" />
+	<http pattern="/app/passwordReset/sendMessage" security="none" />
+	<http pattern="/login**" security="none" />
+	<http pattern="/logout**" security="none" />
+	<http pattern="/loginform**" security="none"/>
+	<http pattern="/services/MobileHttpServlet**" security="none"/>
+<beans:bean id="webInvocationPrivilegeEvaluator" class="org.springframework.security.web.access.DefaultWebInvocationPrivilegeEvaluator" >
+		<beans:constructor-arg index="0">
+			<beans:ref bean="myFilter" />
+		</beans:constructor-arg>
+		</beans:bean>
+	<http auto-config="true">
+		<custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="myFilter" />
+		<form-login login-page="/login.jsp"
+			always-use-default-target="true"
+			authentication-failure-url="/login.jsp?error=true"
+			default-target-url="/loginform/showuserinfo"
+			login-processing-url="/j_security_check" 
+			authentication-failure-handler-ref="failureHandler"/>
+		<remember-me user-service-ref="jsysUserManager"
+			key="e37f4b31-0c45-11dd-bd0b-0800200c9a66" />
+	</http>
+	<beans:bean id="myFilter"
+		class="com.joymain.ng.security.MyFilterSecurityInterceptor">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="accessDecisionManager" ref="accessDecisionManager" />
+		<beans:property name="securityMetadataSource"
+			ref="selfSecurityMetadataSource" />
+	</beans:bean>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="jsysUserManager">
+			<password-encoder ref="md5Encoder"/>
+				
+		</authentication-provider>
+	</authentication-manager>
+
+	<beans:bean id="md5Encoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"
+		/>
+
+<beans:bean id="captchaService" class="com.octo.captcha.service.multitype.GenericManageableCaptchaService">
+ <beans:constructor-arg index="0" ref="imageEngine"/>
+ <beans:constructor-arg type="int" index="1" value="180"/>
+ <beans:constructor-arg type="int" index="2" value="180000"/>
+ <beans:constructor-arg type="int" index="3" value="75000"/>
+</beans:bean>
+
+<beans:bean id="failureHandler" class="com.joymain.ng.security.AccessAuthenticationFailureHandler">
+ <beans:constructor-arg name="defaultFailureUrl" type="java.lang.String" index="0" value=""/>
+</beans:bean>
+
+<beans:bean
+		class="com.octo.captcha.engine.GenericCaptchaEngine" id="imageEngine">
+		<beans:constructor-arg index="0">
+				<beans:list>
+					<beans:ref bean="imageCaptchaFactory"/>
+				</beans:list>
+		</beans:constructor-arg>
+	</beans:bean>
+
+	
+
+	<!-- Override the default password-encoder (SHA) by uncommenting the following 
+		and changing the class -->
+	<!-- <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/> -->
+
+	<global-method-security>
+		<protect-pointcut expression="execution(* *..service.UserManager.getUsers(..))"
+			access="ROLE_ADMIN" />
+		<protect-pointcut expression="execution(* *..service.UserManager.removeUser(..))"
+			access="ROLE_ADMIN" />
+	</global-method-security>
+</beans:beans>

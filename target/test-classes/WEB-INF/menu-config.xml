@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MenuConfig>
+    <Displayers>
+        <Displayer name="Velocity" type="net.sf.navigator.displayer.VelocityMenuDisplayer"/>
+    </Displayers>
+    <Menus>
+        <Menu name="MainMenu" title="mainMenu.title" page="/mainMenu" roles="ROLE_ADMIN,ROLE_USER"/>
+        <Menu name="UserMenu" title="menu.user" description="User Menu" page="/userform" roles="ROLE_ADMIN,ROLE_USER"/>
+        <Menu name="AdminMenu" title="menu.admin" description="Admin Menu" roles="ROLE_ADMIN" page="/admin/users">
+            <Item name="ViewUsers" title="menu.admin.users" page="/admin/users"/>
+            <Item name="ActiveUsers" title="mainMenu.activeUsers" page="/admin/activeUsers"/>
+            <Item name="ReloadContext" title="menu.admin.reload" page="/admin/reload"/>
+            <Item name="FileUpload" title="menu.selectFile" page="/fileupload"/>
+        </Menu>
+        <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER"/>
+        
+        
+        
+        
+        <!--JsysUser-START-->
+        <Menu name="JsysUserMenu" title="jsysUserList.title" page="/jsysUsers"/>
+        <!--JsysUser-END-->
+        <!--JsysRole-START-->
+        <Menu name="JsysRoleMenu" title="jsysRoleList.title" page="/jsysRoles"/>
+        <!--JsysRole-END-->
+        <!--JsysResource-START-->
+        <Menu name="JsysResourceMenu" title="jsysResourceList.title" page="/jsysResources"/>
+        <!--JsysResource-END-->
+        <!--JalCharacterKey-START-->
+        <Menu name="JalCharacterKeyMenu" title="jalCharacterKeyList.title" page="/jalCharacterKeys"/>
+        <!--JalCharacterKey-END-->
+        <!--JalCharacterCoding-START-->
+        <Menu name="JalCharacterCodingMenu" title="jalCharacterCodingList.title" page="/jalCharacterCodings"/>
+        <!--JalCharacterCoding-END-->
+        <!--JalCharacterValue-START-->
+        <Menu name="JalCharacterValueMenu" title="jalCharacterValueList.title" page="/jalCharacterValues"/>
+        <!--JalCharacterValue-END-->
+
+        <!--JfiBankbookBalance-START-->
+        <Menu name="JfiBankbookBalanceMenu" title="jfiBankbookBalanceList.title" page="/jfiBankbookBalances"/>
+        <!--JfiBankbookBalance-END-->
+        <!--JfiBankbookTemp-START-->
+        <Menu name="JfiBankbookTempMenu" title="jfiBankbookTempList.title" page="/jfiBankbookTemps"/>
+        <!--JfiBankbookTemp-END-->
+        <!--JfiBankbookJournal-START-->
+        <Menu name="JfiBankbookJournalMenu" title="jfiBankbookJournalList.title" page="/jfiBankbookJournals"/>
+        <!--JfiBankbookJournal-END-->
+        <!--FiTransferAccount-START-->
+        <Menu name="FiTransferAccountMenu" title="fiTransferAccountList.title" page="/fiTransferAccounts"/>
+        <!--FiTransferAccount-END-->
+        <!--JalCountry-START-->
+        <Menu name="JalCountryMenu" title="jalCountryList.title" page="/jalCountries"/>
+        <!--JalCountry-END-->
+        
+
+        <!--JsysUserRole-START-->
+        <Menu name="JsysUserRoleMenu" title="jsysUserRoleList.title" page="/jsysUserRoles"/>
+        <!--JsysUserRole-END-->
+        <!--AmNew-START-->
+        <Menu name="AmNewMenu" title="amNewList.title" page="/amNews"/>
+        <!--AmNew-END-->
+        <!--JpmProductSaleImage-START-->
+        <Menu name="JpmProductSaleImageMenu" title="jpmProductSaleImageList.title" page="/jpmProductSaleImages"/>
+        <!--JpmProductSaleImage-END-->
+        <!--JpmProductSaleNew-START-->
+        <Menu name="JpmProductSaleNewMenu" title="jpmProductSaleNewList.title" page="/jpmProductSaleNews"/>
+        <!--JpmProductSaleNew-END-->
+        <!--JpmProductSaleRelated-START-->
+        <Menu name="JpmProductSaleRelatedMenu" title="jpmProductSaleRelatedList.title" page="/jpmProductSaleRelateds"/>
+        <!--JpmProductSaleRelated-END-->
+        <!--JpmProductSaleTeamType-START-->
+        <Menu name="JpmProductSaleTeamTypeMenu" title="jpmProductSaleTeamTypeList.title" page="/jpmProductSaleTeamTypes"/>
+        <!--JpmProductSaleTeamType-END-->
+         <!--AmMessage-START-->
+        <Menu name="AmMessageMenu" title="amMessageList.title" page="/amMessages"/>
+        <!--AmMessage-END-->
+
+        <!--JsysId-START-->
+        <Menu name="JsysIdMenu" title="jsysIdList.title" page="/jsysIds"/>
+        <!--JsysId-END-->
+        <!--JpoShippingFee-START-->
+        <Menu name="JpoShippingFeeMenu" title="jpoShippingFeeList.title" page="/jpoShippingFees"/>
+        <!--JpoShippingFee-END-->
+        <!--Jfi99billLog-START-->
+        <Menu name="Jfi99billLogMenu" title="jfi99billLogList.title" page="/jfi99billLogs"/>
+        <!--Jfi99billLog-END-->
+        <!--FiBankbookTemp-START-->
+        <Menu name="FiBankbookTempMenu" title="fiBankbookTempList.title" page="/fiBankbookTemps"/>
+        <!--FiBankbookTemp-END-->
+        <!--FiBankbookJournal-START-->
+        <Menu name="FiBankbookJournalMenu" title="fiBankbookJournalList.title" page="/fiBankbookJournals"/>
+        <!--FiBankbookJournal-END-->
+        <!--FiBankbookBalance-START-->
+        <Menu name="FiBankbookBalanceMenu" title="fiBankbookBalanceList.title" page="/fiBankbookBalances"/>
+        <!--FiBankbookBalance-END-->
+        <!--FiBcoinJournal-START-->
+        <Menu name="FiBcoinJournalMenu" title="fiBcoinJournalList.title" page="/fiBcoinJournals"/>
+        <!--FiBcoinJournal-END-->
+        <!--FiBcoinBalance-START-->
+        <Menu name="FiBcoinBalanceMenu" title="fiBcoinBalanceList.title" page="/fiBcoinBalances"/>
+        <!--FiBcoinBalance-END-->
+        <!--JalFileLibarary-START-->
+        <Menu name="JalFileLibararyMenu" title="jalFileLibararyList.title" page="/jalFileLibararies"/>
+        <!--JalFileLibarary-END-->
+        <!--FiCcoinJournal-START-->
+        <Menu name="FiCcoinJournalMenu" title="fiCcoinJournalList.title" page="/fiCcoinJournals"/>
+        <!--FiCcoinJournal-END-->
+        <!--FiCcoinBalance-START-->
+        <Menu name="FiCcoinBalanceMenu" title="fiCcoinBalanceList.title" page="/fiCcoinBalances"/>
+        <!--FiCcoinBalance-END-->
+        <!--JsysBank-START-->
+        <Menu name="JsysBankMenu" title="jsysBankList.title" page="/jsysBanks"/>
+        <!--JsysBank-END-->
+        <!--JsysLoginLog-START-->
+        <Menu name="JsysLoginLogMenu" title="jsysLoginLogList.title" page="/jsysLoginLogs"/>
+        <!--JsysLoginLog-END-->
+        <!--JmiMemberUpgradeNote-START-->
+        <Menu name="JmiMemberUpgradeNoteMenu" title="jmiMemberUpgradeNoteList.title" page="/jmiMemberUpgradeNotes"/>
+        <!--JmiMemberUpgradeNote-END-->
+        <!--ScheduleManage-START-->
+        <Menu name="ScheduleManageMenu" title="scheduleManageList.title" page="/scheduleManages"/>
+        <!--ScheduleManage-END-->
+        <!--PublicSchedule-START-->
+        <Menu name="PublicScheduleMenu" title="publicScheduleList.title" page="/publicSchedules"/>
+        <!--PublicSchedule-END-->
+        <!--InwDemand-START-->
+        <Menu name="InwDemandMenu" title="inwDemandList.title" page="/inwDemands"/>
+        <!--InwDemand-END-->
+        <!--InwSuggestion-START-->
+        <Menu name="InwSuggestionMenu" title="inwSuggestionList.title" page="/inwSuggestions"/>
+        <!--InwSuggestion-END-->
+        <!--InwProblem-START-->
+        <Menu name="InwProblemMenu" title="inwProblemList.title" page="/inwProblems"/>
+        <!--InwProblem-END-->
+        <!--JalLibraryColumn-START-->
+        <Menu name="JalLibraryColumnMenu" title="jalLibraryColumnList.title" page="/jalLibraryColumns"/>
+        <!--JalLibraryColumn-END-->
+        <!--JalLibraryPlate-START-->
+        <Menu name="JalLibraryPlateMenu" title="jalLibraryPlateList.title" page="/jalLibraryPlates"/>
+        <!--JalLibraryPlate-END-->
+        <!--JalLibraryFile-START-->
+        <Menu name="JalLibraryFileMenu" title="jalLibraryFileList.title" page="/jalLibraryFiles"/>
+        <!--JalLibraryFile-END-->
+        <!--FiCoinLog-START-->
+        <Menu name="FiCoinLogMenu" title="fiCoinLogList.title" page="/fiCoinLogs"/>
+        <!--FiCoinLog-END-->
+        <!--JpmSalePromoter-START-->
+        <Menu name="JpmSalePromoterMenu" title="jpmSalePromoterList.title" page="/jpmSalePromoters"/>
+        <!--JpmSalePromoter-END-->
+        <!--FoundationItem-START-->
+        <Menu name="FoundationItemMenu" title="foundationItemList.title" page="/foundationItems"/>
+        <!--FoundationItem-END-->
+        <!--FoundationOrder-START-->
+        <Menu name="FoundationOrderMenu" title="foundationOrderList.title" page="/foundationOrders"/>
+        <!--FoundationOrder-END-->
+        <!--FiLovecoinBalance-START-->
+        <Menu name="FiLovecoinBalanceMenu" title="fiLovecoinBalanceList.title" page="/fiLovecoinBalances"/>
+        <!--FiLovecoinBalance-END-->
+        <!--FiLovecoinJournal-START-->
+        <Menu name="FiLovecoinJournalMenu" title="fiLovecoinJournalList.title" page="/fiLovecoinJournals"/>
+        <!--FiLovecoinJournal-END-->
+        
+        <!--JpmProductWineTemplateSub-START-->
+        <Menu name="JpmProductWineTemplateSubMenu" title="jpmProductWineTemplateSubList.title" page="/jpmProductWineTemplateSubs"/>
+        <!--JpmProductWineTemplateSub-END-->
+        
+        
+        <!--JpmProductWineTemplate-START-->
+        <Menu name="JpmProductWineTemplateMenu" title="jpmProductWineTemplateList.title" page="/jpmProductWineTemplates"/>
+        <!--JpmProductWineTemplate-END-->
+        <!--JpmWineTemplatePicture-START-->
+        <Menu name="JpmWineTemplatePictureMenu" title="jpmWineTemplatePictureList.title" page="/jpmWineTemplatePictures"/>
+        <!--JpmWineTemplatePicture-END-->
+
+        <!--JfiPosImport-START-->
+        <Menu name="JfiPosImportMenu" title="jfiPosImportList.title" page="/jfiPosImports"/>
+        <!--JfiPosImport-END-->
+        <!--JpmConfigSpecDetailed-START-->
+        <Menu name="JpmConfigSpecDetailedMenu" title="jpmConfigSpecDetailedList.title" page="/jpmConfigSpecDetaileds"/>
+        <!--JpmConfigSpecDetailed-END-->
+        <!--JpmWineOrderInterface-START-->
+        <Menu name="JpmWineOrderInterfaceMenu" title="jpmWineOrderInterfaceList.title" page="/jpmWineOrderInterfaces"/>
+        <!--JpmWineOrderInterface-END-->
+        <!--JpmWineSettingInf-START-->
+        <Menu name="JpmWineSettingInfMenu" title="jpmWineSettingInfList.title" page="/jpmWineSettingInfs"/>
+        <!--JpmWineSettingInf-END-->
+        <!--JpmSendConsignment-START-->
+        <Menu name="JpmSendConsignmentMenu" title="jpmSendConsignmentList.title" page="/jpmSendConsignments"/>
+        <!--JpmSendConsignment-END-->
+        <!--FiBillAccount-START-->
+        <Menu name="FiBillAccountMenu" title="fiBillAccountList.title" page="/fiBillAccounts"/>
+        <!--FiBillAccount-END-->
+        <!--FiBillAccountRelation-START-->
+        <Menu name="FiBillAccountRelationMenu" title="fiBillAccountRelationList.title" page="/fiBillAccountRelations"/>
+        <!--FiBillAccountRelation-END-->
+        <!--FiGetbillaccountLog-START-->
+        <Menu name="FiGetbillaccountLogMenu" title="fiGetbillaccountLogList.title" page="/fiGetbillaccountLogs"/>
+        <!--FiGetbillaccountLog-END-->
+        <!--FiCommonAddr-START-->
+        <Menu name="FiCommonAddrMenu" title="fiCommonAddrList.title" page="/fiCommonAddrs"/>
+        <!--FiCommonAddr-END-->
+        <!--FiFundbookBalance-START-->
+        <Menu name="FiFundbookBalanceMenu" title="fiFundbookBalanceList.title" page="/fiFundbookBalances"/>
+        <!--FiFundbookBalance-END-->
+        <!--FiFundbookJournal-START-->
+        <Menu name="FiFundbookJournalMenu" title="fiFundbookJournalList.title" page="/fiFundbookJournals"/>
+        <!--FiFundbookJournal-END-->
+        <!--FiFundbookTemp-START-->
+        <Menu name="FiFundbookTempMenu" title="fiFundbookTempList.title" page="/fiFundbookTemps"/>
+        <!--FiFundbookTemp-END-->
+        <!--FiTransferFundbook-START-->
+        <Menu name="FiTransferFundbookMenu" title="fiTransferFundbookList.title" page="/fiTransferFundbooks"/>
+        <!--FiTransferFundbook-END-->
+        <!--InwIntegrationTotal-START-->
+        <Menu name="InwIntegrationTotalMenu" title="inwIntegrationTotalList.title" page="/inwIntegrationTotals"/>
+        <!--InwIntegrationTotal-END-->
+        <!--PdShUrl-START-->
+        <Menu name="PdShUrlMenu" title="pdShUrlList.title" page="/pdShUrls"/>
+        <!--PdShUrl-END-->
+        <!--JmiValidLevelList-START-->
+        <Menu name="JmiValidLevelListMenu" title="jmiValidLevelListList.title" page="/jmiValidLevelLists"/>
+        <!--JmiValidLevelList-END-->
+        <!--JmiLevelLock-START-->
+        <Menu name="JmiLevelLockMenu" title="jmiLevelLockList.title" page="/jmiLevelLocks"/>
+        <!--JmiLevelLock-END-->
+        <!--FiMovieOrder-START-->
+        <Menu name="FiMovieOrderMenu" title="fiMovieOrderList.title" page="/fiMovieOrders"/>
+        <!--FiMovieOrder-END-->
+        <!--JpoCheckedFailed-START-->
+        <Menu name="JpoCheckedFailedMenu" title="jpoCheckedFailedList.title" page="/jpoCheckedFaileds"/>
+        <!--JpoCheckedFailed-END-->
+        <!--JmiPrizeTourism-START-->
+        <Menu name="JmiPrizeTourismMenu" title="jmiPrizeTourismList.title" page="/jmiPrizeTourisms"/>
+        <!--JmiPrizeTourism-END-->
+        <!--JmiMemberLog-START-->
+        <Menu name="JmiMemberLogMenu" title="jmiMemberLogList.title" page="/jmiMemberLogs"/>
+        <!--JmiMemberLog-END-->
+		<!--JbdTravelPointAll-START-->
+        <Menu name="JbdTravelPointAllMenu" title="jbdTravelPointAllList.title" page="/jbdTravelPointAlls"/>
+        <!--JbdTravelPointAll-END-->
+
+        <!--JmiUserInvestigation-START-->
+        <Menu name="JmiUserInvestigationMenu" title="jmiUserInvestigationList.title" page="/jmiUserInvestigations"/>
+        <!--JmiUserInvestigation-END-->
+    </Menus>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</MenuConfig>

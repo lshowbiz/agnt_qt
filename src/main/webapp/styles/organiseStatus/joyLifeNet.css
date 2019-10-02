@@ -1,0 +1,62 @@
+﻿@charset "utf-8";
+*   
+ body {
+            background : url('../images/bkgd.png') left top repeat;
+            font-family : "微软雅黑","宋体";
+            font-size : 12px;
+        }
+        table{ border-collapse:separate;}
+        .tr { text-align: right!important;}
+        .tl { text-align: left!important;}
+        .joyLifeNet {
+            margin : 10px;
+            padding : 20px;
+        }
+        .joyLifeNet .line {
+            height : 20px;
+            width : 4px;
+        }
+        .joyLifeNet .down {
+            background-color : #FE9A3C;
+            margin : 0px auto;
+        }
+        .joyLifeNet .top {
+            border-top : 3px solid #FE9A3C;
+        }
+        .joyLifeNet .left {
+            border-right : 2px solid #FE9A3C;
+        }
+        .joyLifeNet .right {
+            border-left : 2px solid #FE9A3C;
+        }
+        .joyLifeNet td {
+            text-align : center;
+            vertical-align : top;
+            padding : 0;
+        }
+        .joyLifeNet .node {
+            position: relative;
+            display : inline-block;
+            width : 96px;
+            height : 68px;
+            margin : 0 2px;
+            border : 2px solid white;
+            color : #FFF;
+            -moz-border-radius : 5px;
+            -webkit-border-radius: 5px;
+            border-radius : 5px;
+            background-color : #58ACA7;
+        }
+        .tabSide {
+            display: none;
+            position: absolute;
+            left: 92px;
+            top: -2px;
+            width: 192px;
+            height: 68px;
+            border:2px solid #ffffff;
+            border-left: none;
+            background-color: #BBDBFF;
+            border-radius: 0 5px 5px 0;
+            *line-height: 15px;
+        }

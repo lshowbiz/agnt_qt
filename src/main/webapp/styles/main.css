@@ -1,0 +1,22 @@
+@charset "utf-8";
+
+body { font-family: "Microsoft Yahei",sans-serif,arial,helvetica; font-size:14px; color:#666;}
+
+.pure-init {
+	margin:0 !important;
+	padding:0 !important;
+}
+.bold {
+	font-weight:bold;
+}
+
+.logistics-info {
+	list-style:none;
+}
+.logistics-info li {
+	margin:5px 0;
+}
+.a-slide-tr {
+	00display:none;
+	background:#CDD3DB;
+}

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+    "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>1.2</jsp-version>
+    <short-name>jecs-ng</short-name>
+    <uri>http://jecs-ng.joylife.com/tags/ng</uri>
+    <tag>
+        <name>label</name>
+        <tag-class>com.joymain.ng.webapp.taglib.LabelTag</tag-class>
+        <attribute>
+            <name>key</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>colon</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>styleClass</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>errorClass</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>constants</name>
+        <tag-class>com.joymain.ng.webapp.taglib.ConstantsTag</tag-class>
+        <tei-class>com.joymain.ng.webapp.taglib.ConstantsTei</tei-class>
+        <attribute>
+            <name>className</name>
+        </attribute>
+        <attribute>
+            <name>scope</name>
+        </attribute>
+        <attribute>
+            <name>var</name>
+        </attribute>
+    </tag>
+    
+    
+    
+    <tag>
+
+      <name>locale</name>
+      <tag-class>com.joymain.ng.webapp.taglib.LocaleTag</tag-class>
+
+      <attribute>
+         <name>key</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+
+      </attribute>
+      <attribute>
+         <name>args</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+      </attribute>
+			<attribute>
+         <name>argTransFlag</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+      </attribute>
+   </tag>
+   
+   
+   <tag>
+
+      <name>code</name>
+      <tag-class>com.joymain.ng.webapp.taglib.CodeTag</tag-class>
+
+      <attribute>
+         <name>listCode</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[List Code]]></description>
+
+      </attribute>
+      <attribute>
+         <name>value</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[Current value]]></description>
+
+      </attribute>
+      
+
+   </tag>
+   <tag>
+
+      <name>list</name>
+      <tag-class>com.joymain.ng.webapp.taglib.ListTag</tag-class>
+      <description><![CDATA[通过List值显示下拉列表框]]></description>
+
+      <attribute>
+         <name>listCode</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[List编码]]></description>
+
+      </attribute>
+      <attribute>
+         <name>value</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[当前值]]></description>
+
+      </attribute>
+      <attribute>
+         <name>defaultValue</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[默认值]]></description>
+
+      </attribute>
+      <attribute>
+         <name>disabled</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[是否disabled]]></description>
+
+      </attribute>
+      <attribute>
+         <name>showBlankLine</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[是否显示空白]]></description>
+
+      </attribute>
+      <attribute>
+         <name>onchange</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[选择变更时触发的事件]]></description>
+
+      </attribute>
+      <attribute>
+         <name>multiple</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[是否显示为多选的样式]]></description>
+
+      </attribute>
+      <attribute>
+         <name>name</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[List名称]]></description>
+
+      </attribute>
+      <attribute>
+         <name>id</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[List ID]]></description>
+
+      </attribute>
+      <attribute>
+         <name>size</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+      </attribute>
+      <attribute>
+         <name>style</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[List对应的HTML的样式]]></description>
+
+      </attribute>
+      <attribute>
+         <name>styleClass</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[List对应的CSS样式]]></description>
+
+      </attribute>
+      <attribute>
+         <name>onclick</name>
+         <required>false</required>
+         <rtexprvalue>true</rtexprvalue>
+
+           <description><![CDATA[List点击触发的事件]]></description>
+
+      </attribute>
+
+   </tag>
+   
+   
+   <tag>
+
+      <name>region</name>
+      <tag-class>com.joymain.ng.webapp.taglib.RegionTag</tag-class>
+
+      <attribute>
+         <name>regionId</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+      </attribute>
+
+      <attribute>
+         <name>regionType</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+      </attribute>
+   </tag>
+   
+   <tag>
+
+      <name>weekFormat</name>
+      <tag-class>com.joymain.ng.webapp.taglib.WeekFormatTag</tag-class>
+
+      <attribute>
+         <name>weekType</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+      </attribute>
+
+      <attribute>
+         <name>week</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+      </attribute>
+   </tag>
+   <tag>
+
+      <name>monthFormat</name>
+      <tag-class>com.joymain.ng.webapp.taglib.MonthFormatTag</tag-class>
+
+      <attribute>
+         <name>monthType</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+      </attribute>
+
+      <attribute>
+         <name>month</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+      </attribute>
+   </tag>
+      <tag>
+
+      <name>period</name>
+      <tag-class>com.joymain.ng.webapp.taglib.PeriodTag</tag-class>
+
+      <attribute>
+         <name>dateStr</name>
+         <required>true</required>
+         <rtexprvalue>true</rtexprvalue>
+
+      </attribute>
+
+   </tag>
+</taglib>

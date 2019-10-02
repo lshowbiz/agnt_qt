@@ -1,0 +1,38 @@
+<decorators defaultdir="/decorators">
+    <excludes>
+        <pattern>/druid/*</pattern>
+        <pattern>/40*.jsp</pattern>
+        <pattern>/*ajax=true*</pattern>
+        <pattern>/struts/*</pattern>
+        <pattern>/resources/*</pattern>
+        <pattern>/login*</pattern>
+        <pattern>/logout*</pattern>
+        <pattern>/loginform*</pattern>
+		<pattern>/scripts/*</pattern>
+		<pattern>/ckeditor/**</pattern>
+		<pattern>/**/*.jpg</pattern>
+		<pattern>/api/**</pattern>
+		<pattern>/*/api/*</pattern>
+        <pattern>/jmiSelectRecommendRef*</pattern>
+        <pattern>/passwordReset*</pattern> 
+        <pattern>/passwordResetStep2*</pattern>
+        <pattern>/passwordResetStep3*</pattern>
+        <pattern>/loginform/notice*</pattern>  
+        <pattern>/jbdBonusTreeSelect*</pattern>    
+        <pattern>/jbdRecommendBonusTreeSelect*</pattern>    
+        <pattern>/jbdMemberCongrations/showDetail*</pattern>  
+        <pattern>/gt/*</pattern>  
+        <pattern>/loginform/guaten_notice*</pattern>  
+        <pattern>/jmiUserInvestigationform*</pattern>  
+        <pattern>/pdExchangeOrderform/orderSelfHelpExchange?strAction=selectNewProduct*</pattern>
+        <pattern>/pdExchangeOrderView/queryNewProduct*</pattern>
+        <pattern>/pdSelectNewProductSorted*</pattern>
+        <pattern>/guatenghandbook1*</pattern>
+        <pattern>/guatenghandbook2*</pattern>
+        <pattern>/guatenghandbook3*</pattern>
+    </excludes> 
+    <decorator name="default" page="default.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+   
+</decorators>

@@ -1,0 +1,243 @@
+<!-- NOTE: If you're working offline, you might have to change the DOCTYPE 
+	to the following: <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate 
+	Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"> -->
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<mapping class="com.joymain.ng.model.Address" />
+		<mapping class="com.joymain.ng.model.AmAnnounce" />
+		<mapping class="com.joymain.ng.model.AmAnnouncePermit" />
+		<mapping class="com.joymain.ng.model.AmAnnounceRecord" />
+		<mapping class="com.joymain.ng.model.AmMessage" />
+		<mapping class="com.joymain.ng.model.AmNew" />
+		<mapping class="com.joymain.ng.model.AmPermit" />
+		<mapping class="com.joymain.ng.model.FiTransferAccount" />
+		<mapping class="com.joymain.ng.model.FiBankbookJournal" />
+		<mapping class="com.joymain.ng.model.FiBankbookBalance" />
+		<mapping class="com.joymain.ng.model.FiBankbookTemp" />
+		<mapping class="com.joymain.ng.model.FiBcoinJournal" />
+		<mapping class="com.joymain.ng.model.FiBcoinBalance" />
+		<mapping class="com.joymain.ng.model.JalCharacterCoding" />
+		<mapping class="com.joymain.ng.model.JalCharacterKey" />
+		<mapping class="com.joymain.ng.model.JalCharacterValue" />
+		<mapping class="com.joymain.ng.model.JalCity" />
+		<mapping class="com.joymain.ng.model.JalCompany" />
+		<mapping class="com.joymain.ng.model.JalCountry" />
+		<mapping class="com.joymain.ng.model.JalDistrict" />
+		<mapping class="com.joymain.ng.model.JalStateProvince" />
+		<mapping class="com.joymain.ng.model.JamMsnDetail" />
+		<mapping class="com.joymain.ng.model.JamMsnType" />
+		<mapping class="com.joymain.ng.model.JbdBonusBalance" />
+		<mapping class="com.joymain.ng.model.JbdMemberLinkCalcHist" />
+		<mapping class="com.joymain.ng.model.JbdPeriod" />
+		<mapping class="com.joymain.ng.model.JbdSendRecordHist" />
+		<mapping class="com.joymain.ng.model.JbdDayCustRecommend" />
+		<mapping class="com.joymain.ng.model.JbdDayCustRecommendOrder" />
+		
+		<mapping class="com.joymain.ng.model.VJbdYd399RecommendList" />
+		
+		<mapping class="com.joymain.ng.model.JbdSummaryList" />
+		<mapping class="com.joymain.ng.model.JbdTravelPoint" />
+		<mapping class="com.joymain.ng.model.Jfi99billLog" />
+		<mapping class="com.joymain.ng.model.JfiChanjetLog" />
+		<mapping class="com.joymain.ng.model.JfiBankbookBalance" />
+		<mapping class="com.joymain.ng.model.JfiBankbookJournal" />
+		<mapping class="com.joymain.ng.model.JfiBankbookTemp" />
+		<mapping class="com.joymain.ng.model.JmiAddrBook" />
+		<mapping class="com.joymain.ng.model.JmiBlacklist" />
+		<mapping class="com.joymain.ng.model.JmiLinkRef" />
+		<mapping class="com.joymain.ng.model.JmiMember" />
+		<mapping class="com.joymain.ng.model.JmiMemberTeam" />
+		<mapping class="com.joymain.ng.model.JmiMemberUpgradeNote" />
+		<mapping class="com.joymain.ng.model.JmiRecommendRef" />
+		<mapping class="com.joymain.ng.model.JmiStore" />
+		<mapping class="com.joymain.ng.model.JmiSubStore" />
+		<mapping class="com.joymain.ng.model.JpmProduct" />
+		<mapping class="com.joymain.ng.model.JpmProductSaleImage" />
+		<mapping class="com.joymain.ng.model.JpmProductSaleNew" />
+		<mapping class="com.joymain.ng.model.JpmProductSaleRelated" />
+		<mapping class="com.joymain.ng.model.JpmProductSaleTeamType" />
+		<mapping class="com.joymain.ng.model.JpoMemberOrder" />
+		<mapping class="com.joymain.ng.model.JpoMemberOrderFee" />
+		<mapping class="com.joymain.ng.model.JpoMemberOrderList" />
+		<mapping class="com.joymain.ng.model.JpoShippingFee" />
+		<mapping class="com.joymain.ng.model.JpoShoppingCart" />
+		<mapping class="com.joymain.ng.model.JpoShoppingCartOrder" />
+		<mapping class="com.joymain.ng.model.JpoShoppingCartOrderList" />
+		<mapping class="com.joymain.ng.model.JprRefund" />
+		<mapping class="com.joymain.ng.model.JsysConfigKey" />
+		<mapping class="com.joymain.ng.model.JsysConfigValue" />
+		<mapping class="com.joymain.ng.model.JsysId" />
+		<mapping class="com.joymain.ng.model.JsysListKey" />
+		<mapping class="com.joymain.ng.model.JsysListValue" />
+		<mapping class="com.joymain.ng.model.JsysResource" />
+		<mapping class="com.joymain.ng.model.JsysRole" />
+		<mapping class="com.joymain.ng.model.JsysUser" />
+		<mapping class="com.joymain.ng.model.JsysUserRole" />
+		<mapping class="com.joymain.ng.model.JsysBank" />
+		<mapping class="com.joymain.ng.model.LabelValue" />
+		<mapping class="com.joymain.ng.model.Role" />
+		<mapping class="com.joymain.ng.model.User" />
+
+		<mapping class="com.joymain.ng.model.PdShipFee" />
+
+
+		<mapping class="com.joymain.ng.model.JalFileLibarary" />
+
+        <mapping class="com.joymain.ng.model.JsysLoginLog"/>
+        <mapping class="com.joymain.ng.model.FiCcoinJournal"/>
+        <mapping class="com.joymain.ng.model.FiCcoinBalance"/>
+        <mapping class="com.joymain.ng.model.FiCoinLog"/>
+        <mapping class="com.joymain.ng.model.ScheduleManage"/>
+        <mapping class="com.joymain.ng.model.PublicSchedule"/>
+        
+        <mapping class="com.joymain.ng.model.Linkman"/>
+
+        <mapping class="com.joymain.ng.model.RelationshipRecord"/>
+        <mapping class="com.joymain.ng.model.LinkmanCategory"/>
+       
+        <mapping class="com.joymain.ng.model.JalLibraryColumn"/>
+        <mapping class="com.joymain.ng.model.JalLibraryFile"/>
+        <mapping class="com.joymain.ng.model.JalLibraryPlate"/>
+        <mapping class="com.joymain.ng.model.JbdMemberFrozen"/>
+       
+        <mapping class="com.joymain.ng.model.LinkmanDemand"/>
+        
+		<mapping class="com.joymain.ng.model.JbdUserCardList"/>
+       
+		<mapping class="com.joymain.ng.model.JpmCardSeq"/>
+		<mapping class="com.joymain.ng.model.JbdSendNote"/>
+		<mapping class="com.joymain.ng.model.JpoUserCoupon"/>
+    
+		<mapping class="com.joymain.ng.model.JbdUserValidList"/>
+        <mapping class="com.joymain.ng.model.JpmSalePromoter"/>
+        <mapping class="com.joymain.ng.model.JpmSalepromoterPro"/>
+        <mapping class="com.joymain.ng.model.LinkmanGoods"/>
+        <mapping class="com.joymain.ng.model.LinkmanMaintain"/>
+        <mapping class="com.joymain.ng.model.LinkmanEvent"/>
+        <mapping class="com.joymain.ng.model.LinkmanActivity"/>
+        <mapping class="com.joymain.ng.model.JbdTravelPoint2014"/>
+        <mapping class="com.joymain.ng.model.JbdSendNote"/>
+        
+         <mapping class="com.joymain.ng.model.InwDemand"/>
+         <mapping class="com.joymain.ng.model.InwDemandsort"/>
+         <mapping class="com.joymain.ng.model.InwIntegration"/>
+         <mapping class="com.joymain.ng.model.InwProblem"/>
+         <mapping class="com.joymain.ng.model.InwSuggestion"/>
+         <mapping class="com.joymain.ng.model.InwIntegrationTotal"/>
+         
+        <mapping class="com.joymain.ng.model.JmiSmsNote"/>
+        <mapping class="com.joymain.ng.model.JpmMemberConfig"/>
+        <mapping class="com.joymain.ng.model.JpmConfigDetailed"/>
+         
+        <mapping class="com.joymain.ng.model.JmiEcmallNote"/>
+        
+        
+        <mapping class="com.joymain.ng.model.FoundationItem"/>
+        <mapping class="com.joymain.ng.model.FoundationOrder"/>
+        <mapping class="com.joymain.ng.model.FiLovecoinBalance"/>
+        <mapping class="com.joymain.ng.model.FiLovecoinJournal"/>
+        <mapping class="com.joymain.ng.model.JmiEcmallNote"/>
+
+        <mapping class="com.joymain.ng.model.JpmProductWineTemplate"/>
+        <mapping class="com.joymain.ng.model.JpmProductWineTemplateSub"/>
+        <mapping class="com.joymain.ng.model.JpmWineTemplatePicture"/>
+
+        <mapping class="com.joymain.ng.model.JfiPosImport"/>
+        <mapping class="com.joymain.ng.model.FiSecurityDeposit"/>
+		<mapping class="com.joymain.ng.model.FiSecurityDepositJournal"/>
+
+        <mapping class="com.joymain.ng.model.MiCoinLog"/>
+        <mapping class="com.joymain.ng.model.JpmConfigSpecDetailed"/>
+
+        <mapping class="com.joymain.ng.model.JpmWineOrderInterface"/>
+        
+		<mapping class="com.joymain.ng.model.JpmWineSettingInf"/>
+        
+		<mapping class="com.joymain.ng.model.JbdBounsDeduct"/>
+        
+        <mapping class="com.joymain.ng.model.JpmWineOrderInterface"/>
+        <mapping class="com.joymain.ng.model.JpmWineOrderListInterface"/>
+        <mapping class="com.joymain.ng.model.JpmWineSettingInf"/>
+        <mapping class="com.joymain.ng.model.JpmWineSettingListInf"/>
+
+        <mapping class="com.joymain.ng.model.JpmSendConsignment"/>
+
+		<mapping class="com.joymain.ng.model.PdSendInfo"/>
+		<mapping class="com.joymain.ng.model.PdSendInfoDetail"/>
+		<mapping class="com.joymain.ng.model.JpoMovie"/>
+		
+		
+        <mapping class="com.joymain.ng.model.FiBillAccount"/>
+        <mapping class="com.joymain.ng.model.FiBillAccountRelation"/>
+        <mapping class="com.joymain.ng.model.FiGetbillaccountLog"/>
+        <mapping class="com.joymain.ng.model.FiCommonAddr"/>
+        <mapping class="com.joymain.ng.model.FiFundbookBalance"/>
+        <mapping class="com.joymain.ng.model.FiFundbookJournal"/>
+        <mapping class="com.joymain.ng.model.FiFundbookTemp"/>
+        <mapping class="com.joymain.ng.model.FiTransferFundbook"/>
+        <mapping class="com.joymain.ng.model.FiBcoinPayconfig"/>
+        <mapping class="com.joymain.ng.model.FiBcoinPayconfigDetail"/>
+        <mapping class="com.joymain.ng.model.JmiTicket"/>
+        
+        <mapping class="com.joymain.ng.model.FiBillAccountWarning"/>
+        <mapping class="com.joymain.ng.model.PdShUrl"/>
+        
+        <mapping class="com.joymain.ng.model.JbdMemberCongrations"/>
+        <mapping class="com.joymain.ng.model.ReportHotProduct"/>
+        <mapping class="com.joymain.ng.model.InwViewpeople"/>
+   
+		<mapping class="com.joymain.ng.model.JbdTravelPoint2015"/>      <mapping class="com.joymain.ng.model.JmiValidLevelList"/>
+        <mapping class="com.joymain.ng.model.JmiLevelLock"/>
+        <mapping class="com.joymain.ng.model.FiMovieOrder"/>
+        <mapping class="com.joymain.ng.model.JpmProductCombination"/>
+        <mapping class="com.joymain.ng.model.JpoProductNumLimit"/>
+        <mapping class="com.joymain.ng.model.JprRefund" />
+        <mapping class="com.joymain.ng.model.JprRefundList" />
+        <mapping class="com.joymain.ng.model.PdLogisticsBase"/>
+        <mapping class="com.joymain.ng.model.PdLogisticsBaseNum"/>
+        <mapping class="com.joymain.ng.model.PdLogisticsBaseDetail"/>
+        <mapping class="com.joymain.ng.model.MailStatus"/>
+        <mapping class="com.joymain.ng.model.Items"/>
+        
+  <mapping class="com.joymain.ng.model.JbdSendRecordNote"/>      
+  		<mapping class="com.joymain.ng.model.JbdBonusFund"/>
+  		<mapping class="com.joymain.ng.model.JpmCouponInfo"/>
+        <mapping class="com.joymain.ng.model.JmiDealList"/>
+        <mapping class="com.joymain.ng.model.JpoCheckedFailed"/>
+        <!--  
+        <mapping class="com.joymain.ng.model.FiPayAccount"/>
+        <mapping class="com.joymain.ng.model.FiPayAccountConfig"/>-->
+        
+		<mapping class="com.joymain.ng.model.JfiDepositBalance"/>
+        
+		<mapping class="com.joymain.ng.model.JmiPrizeTourism"/>
+		<mapping class="com.joymain.ng.model.JmiMemberLog"/>
+
+        <!--  
+        <mapping class="com.joymain.ng.model.FiPayAccount"/>
+        <mapping class="com.joymain.ng.model.FiPayAccountConfig"/>-->
+        <mapping class="com.joymain.ng.model.JbdTravelPointAll"/>
+        <mapping class="com.joymain.ng.model.JfiQuota"/>
+		<mapping class="com.joymain.ng.model.JfiAmountDetails"/>
+		<mapping class="com.joymain.ng.model.JmiUserInvestigation"/>
+        <mapping class="com.joymain.ng.model.PdNotChangeProduct"/>
+        <mapping class="com.joymain.ng.model.PdExchangeOrder"/>
+        <mapping class="com.joymain.ng.model.PdExchangeOrderDetail"/>
+        <mapping class="com.joymain.ng.model.JpmCouponRelationship"/>
+        <mapping class="com.joymain.ng.model.PdExchangeOrderBack"/>
+        <mapping class="com.joymain.ng.model.JpoBankBookPayList"/>
+        <mapping class="com.joymain.ng.model.JsysStockAccount"/>
+        
+        <mapping class="com.joymain.ng.model.FiProductPointTemp"/>
+        <mapping class="com.joymain.ng.model.FiProductPointJournal"/>
+        <mapping class="com.joymain.ng.model.FiProductPointBalance"/>
+        
+        <mapping class="com.joymain.ng.model.YDOrder"/>
+        <mapping class="com.joymain.ng.model.YDOrderItem"/>
+        <mapping class="com.joymain.ng.model.JpoInviteList"/>
+        <mapping class="com.joymain.ng.model.JmiYdSendList"/>
+    </session-factory>
+</hibernate-configuration>

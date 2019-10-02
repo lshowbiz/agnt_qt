@@ -1,0 +1,2512 @@
+<!DOCTYPE project [
+    <!ENTITY config SYSTEM "./config.xmlf">
+    <!ENTITY login SYSTEM "./login.xmlf">
+]>
+<project basedir="." default="run-all-tests">
+    <taskdef resource="webtestTaskdefs.properties" />
+    <!-- for propertyregex: allows to build a message string with parameter replacement: "User {0} successfully created" -->
+    <!-- usage example -->
+    <!--
+        <propertyregex property="updated.byAdmin"
+            input="${user.updated.byAdmin}"
+            regexp="\{0\}"
+            replace="${it_user_signup.fullname}"
+            global="false" />
+        <verifytext description="verify success message" text="${updated.byAdmin}"/>
+     -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+
+    <!-- Use i18n bundle, 2nd one listed is the default -->
+    <property file="../../../target/classes/ApplicationResources_${user.language}.properties"/>
+    <property file="../../../target/classes/ApplicationResources.properties"/>
+    <property file="../../../target/classes/displaytag_${user.language}.properties"/>
+    <property file="../../../target/classes/displaytag.properties"/>
+
+    <!-- runs all targets -->
+    <target name="run-all-tests" 
+
+        depends="Login,Logout,PasswordHint,Signup,UserTests,StaticPages,WebServices,DWR,FileUpload,JpmWineSettingInfTests,JpmWineOrderInterfaceTests,JpmWineTemplatePictureTests,JpmProductWineTemplateTests,JpmProductWineTemplateTests,JpmProductWineTemplateTests,JpmProductWineTemplateSubTests,JpmWineTemplatePictureTests,JmiMemberUpgradeNoteTests,JsysLoginLogTests,JsysBankTests,JpoShoppingCartOrderListTests,JpoShoppingCartOrderTests,JpoMemberOrderTests,JalCompanyTests,JsysConfigValueTests,JsysConfigKeyTests,JsysListValueTests,JsysListKeyTests,JalCharacterValueTests,JalCharacterCodingTests,JalCharacterKeyTests,JsysResourceTests,JsysRoleTests,JsysUserTests,JsysUserTests,JsysUserTests,JsysUserTests"
+
+        description="Call and executes all test cases (targets)"/>
+    
+    <!-- runs user-related tests -->
+    <target name="UserTests" depends="EditUser,SearchUser,SaveUser,AddUser,ActiveUsers"
+        description="Call and executes all user test cases (targets)">
+        <echo>Successfully ran all User UI tests!</echo>
+    </target>
+    
+    <!-- Login to the application -->
+    <target name="Login" description="Runs login test and verifies Main Menu's Title">
+        <webtest name="login">
+            &config;
+            <steps>
+                &login;
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Logout of the application -->
+    <target name="Logout" description="Runs logout test and verifies Login's Title">
+        <webtest name="logout">
+            &config;
+            <steps>
+                &login;
+                <invoke description="get Logout Page" url="/logout"/>
+                <verifytitle description="we should see the login title" text=".*${login.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Retrieve Password Hint -->
+    <target name="PasswordHint" description="Gets the user's password hint">
+        <webtest name="passwordHint">
+            &config;
+            <steps>
+                <invoke description="get Login Page" url="/"/>
+                <verifytitle description="we should see the login title" text=".*${login.title}.*" regex="true"/>
+                <invoke description="click password hint link" url="/passwordHint?username=admin"/>
+                <verifytitle description="show login title again" text=".*${login.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+    
+    <target name="StaticPages" description="Ensures that StaticFilter is working">
+        <webtest name="staticPages">
+            &config;
+            <steps>
+                &login;
+                <invoke description="go to static HTML page" url="/scripts/dojo/test.html"/>
+                <verifytitle description="we should see static title" text="Static HTML Page" regex="true"/>
+                <verifytext description="verify message" text="Static content!"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit user screen displays without errors -->
+    <target name="EditUser"  description="Tests selecting the 'Edit Profile' forward">
+        <webtest name="editUser">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit Profile link" url="/userform"/>
+                <verifytitle description="we should see the user profile title" 
+                    text=".*${userProfile.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+    
+    <!-- Verify the user list screen displays without errors -->
+    <target name="SearchUser" description="Tests search for and displaying all users">
+        <webtest name="searchUser">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View Users link" url="/admin/users"/>
+                <verifytitle description="we should see the user list title" 
+                    text=".*${userList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="matt_raible"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifyXPath
+                     description="Count the number of users found"
+                     xpath="count(//table[@id='users']/tbody/tr)"
+                     text="1"/>
+            </steps>
+        </webtest>
+    </target>
+    
+    <!-- Edit a user and then save -->
+    <target name="SaveUser" description="Tests editing and saving a user">
+        <webtest name="saveUser">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit Profile link" url="/userform"/>
+                <verifytitle description="we should see the user profile title" 
+                    text=".*${userProfile.title}.*" regex="true"/>
+                <setinputfield description="set address" name="address.address" value="2255 Lane Avenue"/>
+                <setinputfield description="set zipcode" name="address.postalCode" value="59826"/>
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="display Main Menu if save OK"
+                     text=".*${mainMenu.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+    
+    <!-- Add a new user after logging in -->
+    <target name="AddUser" description="Adds a new user profile">
+        <webtest name="addUser">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/userform?method=Add&amp;from=list"/>
+                <verifytitle description="view the user profile title" text=".*${userProfile.title}.*" regex="true"/>
+                    
+                <setinputfield description="set username" name="username" value="newuser"/>
+                <setinputfield description="set password" name="password" value="test"/>
+                <setinputfield description="set confirmPassword" name="confirmPassword" value="test"/>
+                <setinputfield description="set firstName" name="firstName" value="Test"/>
+                <setinputfield description="set lastName" name="lastName" value="Name"/>
+                <setinputfield description="set city" name="address.city" value="Denver"/>
+                <setinputfield description="select province" name="address.province" value="CO"/>
+                <setselectfield description="select country" name="address.country" value="US"/>
+                <setinputfield description="set postalCode" name="address.postalCode" value="80210"/>
+                <setinputfield description="set email" name="email" value="newuser@raibledesigns.com"/>
+                <setinputfield description="set website" name="website" value="http://raibledesigns.com"/>
+                <setinputfield description="set passwordHint" name="passwordHint" value="test"/>
+                <setselectfield description="select roles" name="userRoles" value="ROLE_USER"/>
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+
+                <verifytitle description="view user list screen" text=".*${userList.title}.*" regex="true"/>
+                <verifytext description="verify success message" regex="true"
+                    text='&lt;div class="alert alert-success.*&gt;.*Test Name.*&lt;/div&gt;'/>
+                    
+                <!-- Delete user -->
+                <clickLink description="Click edit user link" label="newuser"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytext description="verify success message" regex="true"
+                    text='&lt;div class="alert alert-success.*&gt;.*Test Name.*&lt;/div&gt;'/>
+                <verifytitle description="display user list" text=".*${userList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+    
+    <!-- Sign up a new user (no login) -->
+    <target name="Signup" description="Signup a new user">
+        <webtest name="signup">
+            &config;
+            <steps>
+                <invoke description="click signup link" url="/signup"/>
+                <verifytitle description="view signup title" text=".*${signup.title}.*" regex="true"/>
+                
+                <setinputfield description="set username" name="username" value="signup-user"/>
+                <setinputfield description="set password" name="password" value="test"/>
+                <setinputfield description="set confirmPassword" name="confirmPassword" value="test"/>
+                <setinputfield description="set firstName" name="firstName" value="Test"/>
+                <setinputfield description="set lastName" name="lastName" value="Name"/>
+                <setinputfield description="set city" name="address.city" value="Denver"/>
+                <setinputfield description="set state" name="address.province" value="CO"/>
+                <setselectfield description="select country" name="address.country" value="US"/>
+                <setinputfield description="set postalCode" name="address.postalCode" value="80210"/>
+                <setinputfield description="set email" name="email" value="signup-user@raibledesigns.com"/>
+                <setinputfield description="set website" name="website" value="http://raibledesigns.com"/>
+                <setinputfield description="set passwordHint" name="passwordHint" value="test"/>
+                <clickbutton label="${button.register}" description="Click button 'Signup'"/>
+
+                <verifytitle description="view main menu" text=".*${mainMenu.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${user.registered}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- View Active Users -->
+    <target name="ActiveUsers" description="View Active Users List">
+        <webtest name="activeUsers">
+            &config;
+            <steps>
+                &login;
+                <invoke description="get activeUsers URL" url="/admin/activeUsers"/>
+                <verifytitle description="we should see the activeUsers title" 
+                    text=".*${activeUsers.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+    
+    <!-- File Upload -->
+    <target name="FileUpload" description="Tests uploading a file">
+        <webtest name="fileUpload">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Upload a File link" url="/fileupload"/>
+                <verifytitle description="we should see file upload form" text=".*${upload.title}.*" regex="true"/>
+                <setinputfield description="set name" name="name" value="Canoo Test File"/>
+                <setFileField description="set file" name="file" fileName="web-tests.xml"/>
+                <clickbutton label="${button.upload}" description="Click Upload"/>
+                <verifytitle description="show file data if upload OK" text=".*${display.title}.*" regex="true"/>
+                <verifytext description="verify original filename displayed on page" text="web-tests.xml"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify CXF is configured properly. -->
+    <target name="WebServices" description="Verifies CXF Services are listed">
+        <webtest name="webservices">
+            &config;
+            <steps>
+                &login;
+                <invoke url="/services/"/>
+                <verifytitle description="should see services listing" text="CXF - Service list.*" regex="true"/>
+                <verifytext description="verify page renders" text="Available SOAP services"/>
+                <verifytext description="verify UserManager exist" text="UserService"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify DWR is configured properly. -->
+    <target name="DWR" description="Verifies DWR Index Page">
+        <webtest name="dwr">
+            &config;
+            <steps>
+                &login;
+                <invoke url="/dwr/"/>
+                <verifytitle description="should DWR Test Index" text="DWR Test Index.*" regex="true"/>
+                <clicklink description="click on UserManager link" label="UserManager"/>
+                <verifytext description="verify next page comes up" text="Methods For: UserManager"/>
+            </steps>
+        </webtest>
+    </target>
+    
+    
+    
+    
+    <!--JsysUser-START-->
+    <!-- runs jsysUser-related tests -->
+    <target name="JsysUserTests"
+            depends="SearchJsysUsers,EditJsysUser,SaveJsysUser,AddJsysUser,DeleteJsysUser"
+            description="Call and executes all jsysUser test cases (targets)">
+        <echo>Successfully ran all JsysUser UI tests!</echo>
+    </target>
+
+    <!-- Verify the jsysUsers list screen displays without errors -->
+    <target name="SearchJsysUsers" description="Tests search for and displaying all jsysUsers">
+        <webtest name="searchJsysUsers">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JsysUser link" url="/jsysUsers"/>
+                <verifytitle description="we should see the jsysUserList title"
+                    text=".*${jsysUserList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jsysUserList title"
+                    text=".*${jsysUserList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jsysUser screen displays without errors -->
+    <target name="EditJsysUser" description="Tests editing an existing JsysUser's information">
+        <webtest name="editJsysUser">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JsysUser List" url="/jsysUsers"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jsysUserDetail title"
+                    text=".*${jsysUserDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jsysUser and then save -->
+    <target name="SaveJsysUser" description="Tests editing and saving a jsysUser">
+        <webtest name="saveJsysUser">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysUser link" url="/jsysUserform?userCode=-1"/>
+                <verifytitle description="we should see the jsysUserDetail title"
+                    text=".*${jsysUserDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set companyCode" name="companyCode" value="Ff"/>
+                <setInputField description="set defCharacterCoding" name="defCharacterCoding" value="PhKzIuYlHr"/>
+                <setInputField description="set password" name="password" value="LkEiDjXpZhBzPfNmSlTvLuZuBiPxMbXj"/>
+                <setInputField description="set state" name="state" value="B"/>
+                <setInputField description="set userName" name="userName" value="SbGeVvLaNwGlIqKiVxDjUjRpDpMqAtFmTcTvNoWwTyNqCyXsTcSyMqOpIzVvMcWeNzXoHgSpTpSfBmRgRrEzJmAtEcInQkWfJqQeJyNqKdNqBaQjJrGbOpHgKiItAfMuFeQrCoNxOmSfCqBlUoKzCcQpHeQnRfPtAbLbWxUhMdNzTkMwZvLfSfLpXyVeWzYgHiZnTwBzZjKqCtHrNaQyVdIoXmMxLoPyFjZdWzGtRtXxFoZzYdYySiPuGkTtLlWhTvAiHjQsMsZyRzMdSwPaBsXjLfDtUuYaBnPxEnGvHlJf"/>
+                <setInputField description="set userType" name="userType" value="Wc"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jsysUserDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysUser.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JsysUser -->
+    <target name="AddJsysUser" description="Adds a new JsysUser">
+        <webtest name="addJsysUser">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jsysUserform"/>
+                <verifytitle description="we should see the jsysUserDetail title"
+                    text=".*${jsysUserDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set companyCode" name="companyCode" value="Su"/>
+                <setInputField description="set defCharacterCoding" name="defCharacterCoding" value="FpTpPmDaUa"/>
+                <setInputField description="set password" name="password" value="UhJyLzGcNgBtCmCjHlLeNfXiOlByOnFf"/>
+                <setInputField description="set state" name="state" value="M"/>
+                <setInputField description="set userName" name="userName" value="TgCtFhLqXmTjMaGiZnVtFgXlXlUiEvSoMgHsEbRoCsGdXdDxCpXoXcLoDlJdIkCkUtTsJzGzUcCwUxCiCdYcWaIpTeLbRlHvOrCxErIvYcRuKhPvAcSjRpYvOgZuFyKfRsIoTsLfTcGxLcWhCxFdOuChTuNzYjSaBaRyMaIaRcVuWiOsFmJrEbOjDzKcMmYySvUhNfCgEzHcLaRgQxZxZcPlXvMcDzZoGnJxMgNiYqLaIeXjEuTrOjFbEeBtBcPzKzRuOmVrJuWzVbXlHiQpKpGdHsAaVgOgAaShWqLtKpKx"/>
+                <setInputField description="set userType" name="userType" value="Rs"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JsysUser List appears if save successful"
+                    text=".*${jsysUserList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysUser.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jsysUser -->
+    <target name="DeleteJsysUser" description="Deletes existing JsysUser">
+        <webtest name="deleteJsysUser">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysUser link" url="/jsysUserform?userCode=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JsysUser List" text=".*${jsysUserList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysUser.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JsysUser-END-->
+    <!--JsysRole-START-->
+    <!-- runs jsysRole-related tests -->
+    <target name="JsysRoleTests"
+            depends="SearchJsysRoles,EditJsysRole,SaveJsysRole,AddJsysRole,DeleteJsysRole"
+            description="Call and executes all jsysRole test cases (targets)">
+        <echo>Successfully ran all JsysRole UI tests!</echo>
+    </target>
+
+    <!-- Verify the jsysRoles list screen displays without errors -->
+    <target name="SearchJsysRoles" description="Tests search for and displaying all jsysRoles">
+        <webtest name="searchJsysRoles">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JsysRole link" url="/jsysRoles"/>
+                <verifytitle description="we should see the jsysRoleList title"
+                    text=".*${jsysRoleList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jsysRoleList title"
+                    text=".*${jsysRoleList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jsysRole screen displays without errors -->
+    <target name="EditJsysRole" description="Tests editing an existing JsysRole's information">
+        <webtest name="editJsysRole">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JsysRole List" url="/jsysRoles"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jsysRoleDetail title"
+                    text=".*${jsysRoleDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jsysRole and then save -->
+    <target name="SaveJsysRole" description="Tests editing and saving a jsysRole">
+        <webtest name="saveJsysRole">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysRole link" url="/jsysRoleform?roleId=-1"/>
+                <verifytitle description="we should see the jsysRoleDetail title"
+                    text=".*${jsysRoleDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set available" name="available" value="6837252941830669312"/>
+                <setInputField description="set companyCode" name="companyCode" value="Ze"/>
+                <setInputField description="set roleCode" name="roleCode" value="WmUoEaKpTjFtOuDdXsXqWwUgCiOxUp"/>
+                <setInputField description="set roleName" name="roleName" value="RzSfKnHzXsIuIwGfQhPuUuPkDmPyUsQcMnEoDbWxWfDvOiNvArPcBwNjSzWzExHaGwSfCuHzWyQvNbKzVeXuNwHaAcDdShQwMoNk"/>
+                <setInputField description="set userType" name="userType" value="Hb"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jsysRoleDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysRole.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JsysRole -->
+    <target name="AddJsysRole" description="Adds a new JsysRole">
+        <webtest name="addJsysRole">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jsysRoleform"/>
+                <verifytitle description="we should see the jsysRoleDetail title"
+                    text=".*${jsysRoleDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set available" name="available" value="9074290221488209920"/>
+                <setInputField description="set companyCode" name="companyCode" value="Vv"/>
+                <setInputField description="set roleCode" name="roleCode" value="PzHrZnIlVlQgZyAnLpMaUtTqVuHbEl"/>
+                <setInputField description="set roleName" name="roleName" value="ClHkAvUyZkKfRwAbFhWrBuQlSwBbHtKaHtQsXwQeAhYzLiIpLpRsOrYsCqQzDnWfQcEaRmNlWmOeGyDoSdYxDkGaLxUjNkViOhSx"/>
+                <setInputField description="set userType" name="userType" value="Up"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JsysRole List appears if save successful"
+                    text=".*${jsysRoleList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysRole.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jsysRole -->
+    <target name="DeleteJsysRole" description="Deletes existing JsysRole">
+        <webtest name="deleteJsysRole">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysRole link" url="/jsysRoleform?roleId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JsysRole List" text=".*${jsysRoleList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysRole.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JsysRole-END-->
+    <!--JsysResource-START-->
+    <!-- runs jsysResource-related tests -->
+    <target name="JsysResourceTests"
+            depends="SearchJsysResources,EditJsysResource,SaveJsysResource,AddJsysResource,DeleteJsysResource"
+            description="Call and executes all jsysResource test cases (targets)">
+        <echo>Successfully ran all JsysResource UI tests!</echo>
+    </target>
+
+    <!-- Verify the jsysResources list screen displays without errors -->
+    <target name="SearchJsysResources" description="Tests search for and displaying all jsysResources">
+        <webtest name="searchJsysResources">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JsysResource link" url="/jsysResources"/>
+                <verifytitle description="we should see the jsysResourceList title"
+                    text=".*${jsysResourceList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jsysResourceList title"
+                    text=".*${jsysResourceList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jsysResource screen displays without errors -->
+    <target name="EditJsysResource" description="Tests editing an existing JsysResource's information">
+        <webtest name="editJsysResource">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JsysResource List" url="/jsysResources"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jsysResourceDetail title"
+                    text=".*${jsysResourceDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jsysResource and then save -->
+    <target name="SaveJsysResource" description="Tests editing and saving a jsysResource">
+        <webtest name="saveJsysResource">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysResource link" url="/jsysResourceform?resId=-1"/>
+                <verifytitle description="we should see the jsysResourceDetail title"
+                    text=".*${jsysResourceDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set parentId" name="parentId" value="3015593655594071040"/>
+                <setInputField description="set resType" name="resType" value="8272877236221527040"/>
+                <setInputField description="set sysType" name="sysType" value="HrPsVfUjKr"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jsysResourceDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysResource.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JsysResource -->
+    <target name="AddJsysResource" description="Adds a new JsysResource">
+        <webtest name="addJsysResource">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jsysResourceform"/>
+                <verifytitle description="we should see the jsysResourceDetail title"
+                    text=".*${jsysResourceDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set parentId" name="parentId" value="5082927138985299968"/>
+                <setInputField description="set resType" name="resType" value="8756968971507639296"/>
+                <setInputField description="set sysType" name="sysType" value="HoQhJcSrBc"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JsysResource List appears if save successful"
+                    text=".*${jsysResourceList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysResource.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jsysResource -->
+    <target name="DeleteJsysResource" description="Deletes existing JsysResource">
+        <webtest name="deleteJsysResource">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysResource link" url="/jsysResourceform?resId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JsysResource List" text=".*${jsysResourceList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysResource.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JsysResource-END-->
+    <!--JalCharacterKey-START-->
+    <!-- runs jalCharacterKey-related tests -->
+    <target name="JalCharacterKeyTests"
+            depends="SearchJalCharacterKeys,EditJalCharacterKey,SaveJalCharacterKey,AddJalCharacterKey,DeleteJalCharacterKey"
+            description="Call and executes all jalCharacterKey test cases (targets)">
+        <echo>Successfully ran all JalCharacterKey UI tests!</echo>
+    </target>
+
+    <!-- Verify the jalCharacterKeys list screen displays without errors -->
+    <target name="SearchJalCharacterKeys" description="Tests search for and displaying all jalCharacterKeys">
+        <webtest name="searchJalCharacterKeys">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JalCharacterKey link" url="/jalCharacterKeys"/>
+                <verifytitle description="we should see the jalCharacterKeyList title"
+                    text=".*${jalCharacterKeyList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jalCharacterKeyList title"
+                    text=".*${jalCharacterKeyList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jalCharacterKey screen displays without errors -->
+    <target name="EditJalCharacterKey" description="Tests editing an existing JalCharacterKey's information">
+        <webtest name="editJalCharacterKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JalCharacterKey List" url="/jalCharacterKeys"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jalCharacterKeyDetail title"
+                    text=".*${jalCharacterKeyDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jalCharacterKey and then save -->
+    <target name="SaveJalCharacterKey" description="Tests editing and saving a jalCharacterKey">
+        <webtest name="saveJalCharacterKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JalCharacterKey link" url="/jalCharacterKeyform?keyId=-1"/>
+                <verifytitle description="we should see the jalCharacterKeyDetail title"
+                    text=".*${jalCharacterKeyDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jalCharacterKeyDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCharacterKey.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JalCharacterKey -->
+    <target name="AddJalCharacterKey" description="Adds a new JalCharacterKey">
+        <webtest name="addJalCharacterKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jalCharacterKeyform"/>
+                <verifytitle description="we should see the jalCharacterKeyDetail title"
+                    text=".*${jalCharacterKeyDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JalCharacterKey List appears if save successful"
+                    text=".*${jalCharacterKeyList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCharacterKey.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jalCharacterKey -->
+    <target name="DeleteJalCharacterKey" description="Deletes existing JalCharacterKey">
+        <webtest name="deleteJalCharacterKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JalCharacterKey link" url="/jalCharacterKeyform?keyId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JalCharacterKey List" text=".*${jalCharacterKeyList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCharacterKey.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JalCharacterKey-END-->
+    <!--JalCharacterCoding-START-->
+    <!-- runs jalCharacterCoding-related tests -->
+    <target name="JalCharacterCodingTests"
+            depends="SearchJalCharacterCodings,EditJalCharacterCoding,SaveJalCharacterCoding,AddJalCharacterCoding,DeleteJalCharacterCoding"
+            description="Call and executes all jalCharacterCoding test cases (targets)">
+        <echo>Successfully ran all JalCharacterCoding UI tests!</echo>
+    </target>
+
+    <!-- Verify the jalCharacterCodings list screen displays without errors -->
+    <target name="SearchJalCharacterCodings" description="Tests search for and displaying all jalCharacterCodings">
+        <webtest name="searchJalCharacterCodings">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JalCharacterCoding link" url="/jalCharacterCodings"/>
+                <verifytitle description="we should see the jalCharacterCodingList title"
+                    text=".*${jalCharacterCodingList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jalCharacterCodingList title"
+                    text=".*${jalCharacterCodingList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jalCharacterCoding screen displays without errors -->
+    <target name="EditJalCharacterCoding" description="Tests editing an existing JalCharacterCoding's information">
+        <webtest name="editJalCharacterCoding">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JalCharacterCoding List" url="/jalCharacterCodings"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jalCharacterCodingDetail title"
+                    text=".*${jalCharacterCodingDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jalCharacterCoding and then save -->
+    <target name="SaveJalCharacterCoding" description="Tests editing and saving a jalCharacterCoding">
+        <webtest name="saveJalCharacterCoding">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JalCharacterCoding link" url="/jalCharacterCodingform?characterId=-1"/>
+                <verifytitle description="we should see the jalCharacterCodingDetail title"
+                    text=".*${jalCharacterCodingDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jalCharacterCodingDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCharacterCoding.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JalCharacterCoding -->
+    <target name="AddJalCharacterCoding" description="Adds a new JalCharacterCoding">
+        <webtest name="addJalCharacterCoding">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jalCharacterCodingform"/>
+                <verifytitle description="we should see the jalCharacterCodingDetail title"
+                    text=".*${jalCharacterCodingDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JalCharacterCoding List appears if save successful"
+                    text=".*${jalCharacterCodingList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCharacterCoding.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jalCharacterCoding -->
+    <target name="DeleteJalCharacterCoding" description="Deletes existing JalCharacterCoding">
+        <webtest name="deleteJalCharacterCoding">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JalCharacterCoding link" url="/jalCharacterCodingform?characterId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JalCharacterCoding List" text=".*${jalCharacterCodingList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCharacterCoding.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JalCharacterCoding-END-->
+    <!--JalCharacterValue-START-->
+    <!-- runs jalCharacterValue-related tests -->
+    <target name="JalCharacterValueTests"
+            depends="SearchJalCharacterValues,EditJalCharacterValue,SaveJalCharacterValue,AddJalCharacterValue,DeleteJalCharacterValue"
+            description="Call and executes all jalCharacterValue test cases (targets)">
+        <echo>Successfully ran all JalCharacterValue UI tests!</echo>
+    </target>
+
+    <!-- Verify the jalCharacterValues list screen displays without errors -->
+    <target name="SearchJalCharacterValues" description="Tests search for and displaying all jalCharacterValues">
+        <webtest name="searchJalCharacterValues">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JalCharacterValue link" url="/jalCharacterValues"/>
+                <verifytitle description="we should see the jalCharacterValueList title"
+                    text=".*${jalCharacterValueList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jalCharacterValueList title"
+                    text=".*${jalCharacterValueList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jalCharacterValue screen displays without errors -->
+    <target name="EditJalCharacterValue" description="Tests editing an existing JalCharacterValue's information">
+        <webtest name="editJalCharacterValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JalCharacterValue List" url="/jalCharacterValues"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jalCharacterValueDetail title"
+                    text=".*${jalCharacterValueDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jalCharacterValue and then save -->
+    <target name="SaveJalCharacterValue" description="Tests editing and saving a jalCharacterValue">
+        <webtest name="saveJalCharacterValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JalCharacterValue link" url="/jalCharacterValueform?valueId=-1"/>
+                <verifytitle description="we should see the jalCharacterValueDetail title"
+                    text=".*${jalCharacterValueDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jalCharacterValueDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCharacterValue.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JalCharacterValue -->
+    <target name="AddJalCharacterValue" description="Adds a new JalCharacterValue">
+        <webtest name="addJalCharacterValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jalCharacterValueform"/>
+                <verifytitle description="we should see the jalCharacterValueDetail title"
+                    text=".*${jalCharacterValueDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JalCharacterValue List appears if save successful"
+                    text=".*${jalCharacterValueList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCharacterValue.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jalCharacterValue -->
+    <target name="DeleteJalCharacterValue" description="Deletes existing JalCharacterValue">
+        <webtest name="deleteJalCharacterValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JalCharacterValue link" url="/jalCharacterValueform?valueId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JalCharacterValue List" text=".*${jalCharacterValueList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCharacterValue.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JalCharacterValue-END-->
+    
+    <!--JsysListKey-START-->
+    <!-- runs jsysListKey-related tests -->
+    <target name="JsysListKeyTests"
+            depends="SearchJsysListKeys,EditJsysListKey,SaveJsysListKey,AddJsysListKey,DeleteJsysListKey"
+            description="Call and executes all jsysListKey test cases (targets)">
+        <echo>Successfully ran all JsysListKey UI tests!</echo>
+    </target>
+
+    <!-- Verify the jsysListKeys list screen displays without errors -->
+    <target name="SearchJsysListKeys" description="Tests search for and displaying all jsysListKeys">
+        <webtest name="searchJsysListKeys">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JsysListKey link" url="/jsysListKeys"/>
+                <verifytitle description="we should see the jsysListKeyList title"
+                    text=".*${jsysListKeyList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jsysListKeyList title"
+                    text=".*${jsysListKeyList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jsysListKey screen displays without errors -->
+    <target name="EditJsysListKey" description="Tests editing an existing JsysListKey's information">
+        <webtest name="editJsysListKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JsysListKey List" url="/jsysListKeys"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jsysListKeyDetail title"
+                    text=".*${jsysListKeyDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jsysListKey and then save -->
+    <target name="SaveJsysListKey" description="Tests editing and saving a jsysListKey">
+        <webtest name="saveJsysListKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysListKey link" url="/jsysListKeyform?keyId=-1"/>
+                <verifytitle description="we should see the jsysListKeyDetail title"
+                    text=".*${jsysListKeyDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set listCode" name="listCode" value="LcBfUuKoWiOiFxRxDtJzKzAaSyRfYjIcVcYkAtMbZlXvYjSqUa"/>
+                <setInputField description="set listName" name="listName" value="YjPxBjBqDxPvLxOzHlEnVqOlIhVsUjNxTgVvCjEaDcDjNwVfGuCjMsHpJuJwXzZxQaAlCjAkTvImRzPdFfRwOxMmZhCeLgVvBlIhTyUmTyMhSpYlEyYjLpAoSqOgRuPbCwSzAdKvLuZgKqIsPnLzSr"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jsysListKeyDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysListKey.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JsysListKey -->
+    <target name="AddJsysListKey" description="Adds a new JsysListKey">
+        <webtest name="addJsysListKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jsysListKeyform"/>
+                <verifytitle description="we should see the jsysListKeyDetail title"
+                    text=".*${jsysListKeyDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set listCode" name="listCode" value="PhKfFfWcQtVfDvAxLjWiDsHlJnImRlRkFlYlAaMxNjXxMhWpDk"/>
+                <setInputField description="set listName" name="listName" value="HmYeIsPmYqCtXbUhHvBdMsJmPbEbBbXoSqRfAvUrZgZkEbHpVdHiGrWwRzShZqUeZmCjUaIiCzXmQcTpVsSxKuFtWzVzRrIbVaHqMmStPgFpFuAzJiVdAbJiOjNrVeRdKzVpHaToBzWfGkGsIaGsDe"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JsysListKey List appears if save successful"
+                    text=".*${jsysListKeyList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysListKey.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jsysListKey -->
+    <target name="DeleteJsysListKey" description="Deletes existing JsysListKey">
+        <webtest name="deleteJsysListKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysListKey link" url="/jsysListKeyform?keyId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JsysListKey List" text=".*${jsysListKeyList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysListKey.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JsysListKey-END-->
+    <!--JsysListValue-START-->
+    <!-- runs jsysListValue-related tests -->
+    <target name="JsysListValueTests"
+            depends="SearchJsysListValues,EditJsysListValue,SaveJsysListValue,AddJsysListValue,DeleteJsysListValue"
+            description="Call and executes all jsysListValue test cases (targets)">
+        <echo>Successfully ran all JsysListValue UI tests!</echo>
+    </target>
+
+    <!-- Verify the jsysListValues list screen displays without errors -->
+    <target name="SearchJsysListValues" description="Tests search for and displaying all jsysListValues">
+        <webtest name="searchJsysListValues">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JsysListValue link" url="/jsysListValues"/>
+                <verifytitle description="we should see the jsysListValueList title"
+                    text=".*${jsysListValueList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jsysListValueList title"
+                    text=".*${jsysListValueList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jsysListValue screen displays without errors -->
+    <target name="EditJsysListValue" description="Tests editing an existing JsysListValue's information">
+        <webtest name="editJsysListValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JsysListValue List" url="/jsysListValues"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jsysListValueDetail title"
+                    text=".*${jsysListValueDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jsysListValue and then save -->
+    <target name="SaveJsysListValue" description="Tests editing and saving a jsysListValue">
+        <webtest name="saveJsysListValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysListValue link" url="/jsysListValueform?valueId=-1"/>
+                <verifytitle description="we should see the jsysListValueDetail title"
+                    text=".*${jsysListValueDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set valueCode" name="valueCode" value="GeBxUjQgGxEsQqDmJpQjAfEbFnPtCjNhZvHvXqUzXpJoQxBrNt"/>
+                <setInputField description="set valueTitle" name="valueTitle" value="HaVdPmSfKcAsYvHdUpHlBwQnAgVaUmLsXrFnHrDfGqQjLxWnQbLdNbKfIeEgDpTgSgFhWcMtOvDqVbSdWcXiXlBuHzBpJxDjRbUuVhByNfVwTsGeSiWeMzVqJjGjVeQoVjSfSjItFgHyOdXsZsSdPz"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jsysListValueDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysListValue.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JsysListValue -->
+    <target name="AddJsysListValue" description="Adds a new JsysListValue">
+        <webtest name="addJsysListValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jsysListValueform"/>
+                <verifytitle description="we should see the jsysListValueDetail title"
+                    text=".*${jsysListValueDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set valueCode" name="valueCode" value="NsRsGvNwJyXnCpJdEqNeViBiRjWxFcVuTfDnVjLkHaFxUtPeIu"/>
+                <setInputField description="set valueTitle" name="valueTitle" value="VmBeXlExSgPgYkIaBoTtSnFhRqQuEoUmKfZqXeUcNsDwXaGbApYmFvFlEaZoThXsMuBrRrFbHiVwZuPfThTwJbFnDtSnKmMwJcOuSpYoQoKuKcRzJhKtFvRrKwGvFoDhVsKhNhOsYnOaBsVfFqYyUj"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JsysListValue List appears if save successful"
+                    text=".*${jsysListValueList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysListValue.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jsysListValue -->
+    <target name="DeleteJsysListValue" description="Deletes existing JsysListValue">
+        <webtest name="deleteJsysListValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysListValue link" url="/jsysListValueform?valueId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JsysListValue List" text=".*${jsysListValueList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysListValue.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JsysListValue-END-->
+    <!--JsysConfigKey-START-->
+    <!-- runs jsysConfigKey-related tests -->
+    <target name="JsysConfigKeyTests"
+            depends="SearchJsysConfigKeys,EditJsysConfigKey,SaveJsysConfigKey,AddJsysConfigKey,DeleteJsysConfigKey"
+            description="Call and executes all jsysConfigKey test cases (targets)">
+        <echo>Successfully ran all JsysConfigKey UI tests!</echo>
+    </target>
+
+    <!-- Verify the jsysConfigKeys list screen displays without errors -->
+    <target name="SearchJsysConfigKeys" description="Tests search for and displaying all jsysConfigKeys">
+        <webtest name="searchJsysConfigKeys">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JsysConfigKey link" url="/jsysConfigKeys"/>
+                <verifytitle description="we should see the jsysConfigKeyList title"
+                    text=".*${jsysConfigKeyList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jsysConfigKeyList title"
+                    text=".*${jsysConfigKeyList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jsysConfigKey screen displays without errors -->
+    <target name="EditJsysConfigKey" description="Tests editing an existing JsysConfigKey's information">
+        <webtest name="editJsysConfigKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JsysConfigKey List" url="/jsysConfigKeys"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jsysConfigKeyDetail title"
+                    text=".*${jsysConfigKeyDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jsysConfigKey and then save -->
+    <target name="SaveJsysConfigKey" description="Tests editing and saving a jsysConfigKey">
+        <webtest name="saveJsysConfigKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysConfigKey link" url="/jsysConfigKeyform?keyId=-1"/>
+                <verifytitle description="we should see the jsysConfigKeyDetail title"
+                    text=".*${jsysConfigKeyDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set configCode" name="configCode" value="CqQcGuWbRqZhKbFtReSkWnRsAwHpHeCaIbElIgIkEyXaEeCbCf"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jsysConfigKeyDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysConfigKey.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JsysConfigKey -->
+    <target name="AddJsysConfigKey" description="Adds a new JsysConfigKey">
+        <webtest name="addJsysConfigKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jsysConfigKeyform"/>
+                <verifytitle description="we should see the jsysConfigKeyDetail title"
+                    text=".*${jsysConfigKeyDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set configCode" name="configCode" value="GqAbVeVfRwYhFiZzZuFzJoFcJaOuNhJbRfVkCgLuYuXhEaCqQe"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JsysConfigKey List appears if save successful"
+                    text=".*${jsysConfigKeyList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysConfigKey.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jsysConfigKey -->
+    <target name="DeleteJsysConfigKey" description="Deletes existing JsysConfigKey">
+        <webtest name="deleteJsysConfigKey">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysConfigKey link" url="/jsysConfigKeyform?keyId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JsysConfigKey List" text=".*${jsysConfigKeyList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysConfigKey.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JsysConfigKey-END-->
+    <!--JsysConfigValue-START-->
+    <!-- runs jsysConfigValue-related tests -->
+    <target name="JsysConfigValueTests"
+            depends="SearchJsysConfigValues,EditJsysConfigValue,SaveJsysConfigValue,AddJsysConfigValue,DeleteJsysConfigValue"
+            description="Call and executes all jsysConfigValue test cases (targets)">
+        <echo>Successfully ran all JsysConfigValue UI tests!</echo>
+    </target>
+
+    <!-- Verify the jsysConfigValues list screen displays without errors -->
+    <target name="SearchJsysConfigValues" description="Tests search for and displaying all jsysConfigValues">
+        <webtest name="searchJsysConfigValues">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JsysConfigValue link" url="/jsysConfigValues"/>
+                <verifytitle description="we should see the jsysConfigValueList title"
+                    text=".*${jsysConfigValueList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jsysConfigValueList title"
+                    text=".*${jsysConfigValueList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jsysConfigValue screen displays without errors -->
+    <target name="EditJsysConfigValue" description="Tests editing an existing JsysConfigValue's information">
+        <webtest name="editJsysConfigValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JsysConfigValue List" url="/jsysConfigValues"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jsysConfigValueDetail title"
+                    text=".*${jsysConfigValueDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jsysConfigValue and then save -->
+    <target name="SaveJsysConfigValue" description="Tests editing and saving a jsysConfigValue">
+        <webtest name="saveJsysConfigValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysConfigValue link" url="/jsysConfigValueform?valueId=-1"/>
+                <verifytitle description="we should see the jsysConfigValueDetail title"
+                    text=".*${jsysConfigValueDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set companyCode" name="companyCode" value="Pi"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jsysConfigValueDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysConfigValue.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JsysConfigValue -->
+    <target name="AddJsysConfigValue" description="Adds a new JsysConfigValue">
+        <webtest name="addJsysConfigValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jsysConfigValueform"/>
+                <verifytitle description="we should see the jsysConfigValueDetail title"
+                    text=".*${jsysConfigValueDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set companyCode" name="companyCode" value="Ee"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JsysConfigValue List appears if save successful"
+                    text=".*${jsysConfigValueList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysConfigValue.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jsysConfigValue -->
+    <target name="DeleteJsysConfigValue" description="Deletes existing JsysConfigValue">
+        <webtest name="deleteJsysConfigValue">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysConfigValue link" url="/jsysConfigValueform?valueId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JsysConfigValue List" text=".*${jsysConfigValueList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysConfigValue.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JsysConfigValue-END-->
+    <!--JalCompany-START-->
+    <!-- runs jalCompany-related tests -->
+    <target name="JalCompanyTests"
+            depends="SearchJalCompanies,EditJalCompany,SaveJalCompany,AddJalCompany,DeleteJalCompany"
+            description="Call and executes all jalCompany test cases (targets)">
+        <echo>Successfully ran all JalCompany UI tests!</echo>
+    </target>
+
+    <!-- Verify the jalCompanies list screen displays without errors -->
+    <target name="SearchJalCompanies" description="Tests search for and displaying all jalCompanies">
+        <webtest name="searchJalCompanies">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JalCompany link" url="/jalCompanies"/>
+                <verifytitle description="we should see the jalCompanyList title"
+                    text=".*${jalCompanyList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jalCompanyList title"
+                    text=".*${jalCompanyList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jalCompany screen displays without errors -->
+    <target name="EditJalCompany" description="Tests editing an existing JalCompany's information">
+        <webtest name="editJalCompany">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JalCompany List" url="/jalCompanies"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jalCompanyDetail title"
+                    text=".*${jalCompanyDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jalCompany and then save -->
+    <target name="SaveJalCompany" description="Tests editing and saving a jalCompany">
+        <webtest name="saveJalCompany">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JalCompany link" url="/jalCompanyform?companyId=-1"/>
+                <verifytitle description="we should see the jalCompanyDetail title"
+                    text=".*${jalCompanyDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set characterCode" name="characterCode" value="VoShCnUhAx"/>
+                <setInputField description="set companyCode" name="companyCode" value="Bk"/>
+                <setInputField description="set companyName" name="companyName" value="OdPaVvXpFdCsNfNwUqGgMzJmUgPjKkYyDqDyMmDaIjPpVgJeGfVtWdHsBlRqKeZrFcOaJxLyOiJcUiRwOuAaLkDfPyTnYhLnVkRaOyUaVjCaYeFuYsSnFrQqVqYyReVdJhOaVvGiUqJaZqBsDsFtRkTgSmDgQiSvSuWtUvYmDcLiYpEzLbLbQxAaNeXtBoYrEzNnWdAyCmZrTdZcFwAaSvCjGqOgJdEoNaKyYcRrLtItVeRqKvRfTcVoUc"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jalCompanyDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCompany.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JalCompany -->
+    <target name="AddJalCompany" description="Adds a new JalCompany">
+        <webtest name="addJalCompany">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jalCompanyform"/>
+                <verifytitle description="we should see the jalCompanyDetail title"
+                    text=".*${jalCompanyDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set characterCode" name="characterCode" value="DdUtJbDjQl"/>
+                <setInputField description="set companyCode" name="companyCode" value="Sp"/>
+                <setInputField description="set companyName" name="companyName" value="ZcGnUnDaInLeCwPtBbXjGgPwXbPjPiYuJaNyKhKmNkLnSzDlHmYaSrHjQvIyXyIxSfPuSjOaGgOpDuQuCkDiOzMmGlUrYgCmNyZxCsOhSoMrIgIkDsBeFlItEeOzAjNvOuLlTdEvYeNlOwArBzFeIaEmIkWtVuBqJwHaAiLcBaPiHvGhDlFeEwHfIsKyVfEvLeAtOvXqGrSrGiPoQsOyXvZwXdKtFmDxKdCiAcOnTfMpBeDlXiPfUoBnQs"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JalCompany List appears if save successful"
+                    text=".*${jalCompanyList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCompany.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jalCompany -->
+    <target name="DeleteJalCompany" description="Deletes existing JalCompany">
+        <webtest name="deleteJalCompany">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JalCompany link" url="/jalCompanyform?companyId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JalCompany List" text=".*${jalCompanyList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jalCompany.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JalCompany-END-->
+    <!--JpoMemberOrder-START-->
+    <!-- runs jpoMemberOrder-related tests -->
+    <target name="JpoMemberOrderTests"
+            depends="SearchJpoMemberOrders,EditJpoMemberOrder,SaveJpoMemberOrder,AddJpoMemberOrder,DeleteJpoMemberOrder"
+            description="Call and executes all jpoMemberOrder test cases (targets)">
+        <echo>Successfully ran all JpoMemberOrder UI tests!</echo>
+    </target>
+
+    <!-- Verify the jpoMemberOrders list screen displays without errors -->
+    <target name="SearchJpoMemberOrders" description="Tests search for and displaying all jpoMemberOrders">
+        <webtest name="searchJpoMemberOrders">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JpoMemberOrder link" url="/jpoMemberOrders"/>
+                <verifytitle description="we should see the jpoMemberOrderList title"
+                    text=".*${jpoMemberOrderList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jpoMemberOrderList title"
+                    text=".*${jpoMemberOrderList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jpoMemberOrder screen displays without errors -->
+    <target name="EditJpoMemberOrder" description="Tests editing an existing JpoMemberOrder's information">
+        <webtest name="editJpoMemberOrder">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JpoMemberOrder List" url="/jpoMemberOrders"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jpoMemberOrderDetail title"
+                    text=".*${jpoMemberOrderDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jpoMemberOrder and then save -->
+    <target name="SaveJpoMemberOrder" description="Tests editing and saving a jpoMemberOrder">
+        <webtest name="saveJpoMemberOrder">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpoMemberOrder link" url="/jpoMemberOrderform?moId=-1"/>
+                <verifytitle description="we should see the jpoMemberOrderDetail title"
+                    text=".*${jpoMemberOrderDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set userCode" name="userCode" value="ZhQkMlOjCeJtVvPiMjGd"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jpoMemberOrderDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpoMemberOrder.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JpoMemberOrder -->
+    <target name="AddJpoMemberOrder" description="Adds a new JpoMemberOrder">
+        <webtest name="addJpoMemberOrder">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jpoMemberOrderform"/>
+                <verifytitle description="we should see the jpoMemberOrderDetail title"
+                    text=".*${jpoMemberOrderDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set userCode" name="userCode" value="LqHxOqWuOhIbStXkZgFi"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JpoMemberOrder List appears if save successful"
+                    text=".*${jpoMemberOrderList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpoMemberOrder.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jpoMemberOrder -->
+    <target name="DeleteJpoMemberOrder" description="Deletes existing JpoMemberOrder">
+        <webtest name="deleteJpoMemberOrder">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpoMemberOrder link" url="/jpoMemberOrderform?moId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JpoMemberOrder List" text=".*${jpoMemberOrderList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpoMemberOrder.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JpoMemberOrder-END-->
+    <!--JpoShoppingCartOrder-START-->
+    <!-- runs jpoShoppingCartOrder-related tests -->
+    <target name="JpoShoppingCartOrderTests"
+            depends="SearchJpoShoppingCartOrders,EditJpoShoppingCartOrder,SaveJpoShoppingCartOrder,AddJpoShoppingCartOrder,DeleteJpoShoppingCartOrder"
+            description="Call and executes all jpoShoppingCartOrder test cases (targets)">
+        <echo>Successfully ran all JpoShoppingCartOrder UI tests!</echo>
+    </target>
+
+    <!-- Verify the jpoShoppingCartOrders list screen displays without errors -->
+    <target name="SearchJpoShoppingCartOrders" description="Tests search for and displaying all jpoShoppingCartOrders">
+        <webtest name="searchJpoShoppingCartOrders">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JpoShoppingCartOrder link" url="/jpoShoppingCartOrders"/>
+                <verifytitle description="we should see the jpoShoppingCartOrderList title"
+                    text=".*${jpoShoppingCartOrderList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jpoShoppingCartOrderList title"
+                    text=".*${jpoShoppingCartOrderList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jpoShoppingCartOrder screen displays without errors -->
+    <target name="EditJpoShoppingCartOrder" description="Tests editing an existing JpoShoppingCartOrder's information">
+        <webtest name="editJpoShoppingCartOrder">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JpoShoppingCartOrder List" url="/jpoShoppingCartOrders"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jpoShoppingCartOrderDetail title"
+                    text=".*${jpoShoppingCartOrderDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jpoShoppingCartOrder and then save -->
+    <target name="SaveJpoShoppingCartOrder" description="Tests editing and saving a jpoShoppingCartOrder">
+        <webtest name="saveJpoShoppingCartOrder">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpoShoppingCartOrder link" url="/jpoShoppingCartOrderform?scId=-1"/>
+                <verifytitle description="we should see the jpoShoppingCartOrderDetail title"
+                    text=".*${jpoShoppingCartOrderDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set orderType" name="orderType" value="AmDq"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jpoShoppingCartOrderDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpoShoppingCartOrder.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JpoShoppingCartOrder -->
+    <target name="AddJpoShoppingCartOrder" description="Adds a new JpoShoppingCartOrder">
+        <webtest name="addJpoShoppingCartOrder">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jpoShoppingCartOrderform"/>
+                <verifytitle description="we should see the jpoShoppingCartOrderDetail title"
+                    text=".*${jpoShoppingCartOrderDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set orderType" name="orderType" value="XfHc"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JpoShoppingCartOrder List appears if save successful"
+                    text=".*${jpoShoppingCartOrderList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpoShoppingCartOrder.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jpoShoppingCartOrder -->
+    <target name="DeleteJpoShoppingCartOrder" description="Deletes existing JpoShoppingCartOrder">
+        <webtest name="deleteJpoShoppingCartOrder">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpoShoppingCartOrder link" url="/jpoShoppingCartOrderform?scId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JpoShoppingCartOrder List" text=".*${jpoShoppingCartOrderList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpoShoppingCartOrder.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JpoShoppingCartOrder-END-->
+    <!--JpoShoppingCartOrderList-START-->
+    <!-- runs jpoShoppingCartOrderList-related tests -->
+    <target name="JpoShoppingCartOrderListTests"
+            depends="SearchJpoShoppingCartOrderLists,EditJpoShoppingCartOrderList,SaveJpoShoppingCartOrderList,AddJpoShoppingCartOrderList,DeleteJpoShoppingCartOrderList"
+            description="Call and executes all jpoShoppingCartOrderList test cases (targets)">
+        <echo>Successfully ran all JpoShoppingCartOrderList UI tests!</echo>
+    </target>
+
+    <!-- Verify the jpoShoppingCartOrderLists list screen displays without errors -->
+    <target name="SearchJpoShoppingCartOrderLists" description="Tests search for and displaying all jpoShoppingCartOrderLists">
+        <webtest name="searchJpoShoppingCartOrderLists">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JpoShoppingCartOrderList link" url="/jpoShoppingCartOrderLists"/>
+                <verifytitle description="we should see the jpoShoppingCartOrderListList title"
+                    text=".*${jpoShoppingCartOrderListList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jpoShoppingCartOrderListList title"
+                    text=".*${jpoShoppingCartOrderListList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jpoShoppingCartOrderList screen displays without errors -->
+    <target name="EditJpoShoppingCartOrderList" description="Tests editing an existing JpoShoppingCartOrderList's information">
+        <webtest name="editJpoShoppingCartOrderList">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JpoShoppingCartOrderList List" url="/jpoShoppingCartOrderLists"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jpoShoppingCartOrderListDetail title"
+                    text=".*${jpoShoppingCartOrderListDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jpoShoppingCartOrderList and then save -->
+    <target name="SaveJpoShoppingCartOrderList" description="Tests editing and saving a jpoShoppingCartOrderList">
+        <webtest name="saveJpoShoppingCartOrderList">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpoShoppingCartOrderList link" url="/jpoShoppingCartOrderListform?sclId=-1"/>
+                <verifytitle description="we should see the jpoShoppingCartOrderListDetail title"
+                    text=".*${jpoShoppingCartOrderListDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set productId" name="productId" value="7904334277452633088"/>
+                <setInputField description="set qty" name="qty" value="977133975"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jpoShoppingCartOrderListDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpoShoppingCartOrderList.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JpoShoppingCartOrderList -->
+    <target name="AddJpoShoppingCartOrderList" description="Adds a new JpoShoppingCartOrderList">
+        <webtest name="addJpoShoppingCartOrderList">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jpoShoppingCartOrderListform"/>
+                <verifytitle description="we should see the jpoShoppingCartOrderListDetail title"
+                    text=".*${jpoShoppingCartOrderListDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set productId" name="productId" value="5942869779702730752"/>
+                <setInputField description="set qty" name="qty" value="1566876041"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JpoShoppingCartOrderList List appears if save successful"
+                    text=".*${jpoShoppingCartOrderListList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpoShoppingCartOrderList.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jpoShoppingCartOrderList -->
+    <target name="DeleteJpoShoppingCartOrderList" description="Deletes existing JpoShoppingCartOrderList">
+        <webtest name="deleteJpoShoppingCartOrderList">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpoShoppingCartOrderList link" url="/jpoShoppingCartOrderListform?sclId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JpoShoppingCartOrderList List" text=".*${jpoShoppingCartOrderListList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpoShoppingCartOrderList.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JpoShoppingCartOrderList-END-->
+    <!--JsysBank-START-->
+    <!-- runs jsysBank-related tests -->
+    <target name="JsysBankTests"
+            depends="SearchJsysBanks,EditJsysBank,SaveJsysBank,AddJsysBank,DeleteJsysBank"
+            description="Call and executes all jsysBank test cases (targets)">
+        <echo>Successfully ran all JsysBank UI tests!</echo>
+    </target>
+
+    <!-- Verify the jsysBanks list screen displays without errors -->
+    <target name="SearchJsysBanks" description="Tests search for and displaying all jsysBanks">
+        <webtest name="searchJsysBanks">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JsysBank link" url="/jsysBanks"/>
+                <verifytitle description="we should see the jsysBankList title"
+                    text=".*${jsysBankList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jsysBankList title"
+                    text=".*${jsysBankList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jsysBank screen displays without errors -->
+    <target name="EditJsysBank" description="Tests editing an existing JsysBank's information">
+        <webtest name="editJsysBank">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JsysBank List" url="/jsysBanks"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jsysBankDetail title"
+                    text=".*${jsysBankDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jsysBank and then save -->
+    <target name="SaveJsysBank" description="Tests editing and saving a jsysBank">
+        <webtest name="saveJsysBank">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysBank link" url="/jsysBankform?bankId=-1"/>
+                <verifytitle description="we should see the jsysBankDetail title"
+                    text=".*${jsysBankDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set bankKey" name="bankKey" value="CeIzJlDwRiGmSbUtRbJlSmAdEsWjWwBaZiWuGaEjVfYwVbBfReIjAqAwPsHqVtFiDkEsCfFnOdIvDgDxErRtPuWoKvKlFjCqQoWvAsUgXwNdHuTwRrSfWfHlUpEsPwRnBmOqDsYwWeAoOqXvEaLvXjVfOmMaLwRzZnSwLeDaBqFtUtBdOwVsZuSmUfOvRiQkVuGyRjBuBhRfOnDqVhGvElUqKkWiTjGoZmNgOsAdQdMqVfIvAnAfYyDvHhZcQoBcBnTzGtZjPmRlWxKhAaHeQjGcMwQnMpFtNpLbFnVhMrFm"/>
+                <setInputField description="set bankValue" name="bankValue" value="YqGoWdIaNdCdUhOzZtUsNdGhBeSzRaCeBtQtAtWuOgFtLiWsPbYzWuVcToRpAzPsBmCbGlTnGmSbFiCoMkQlNcIvHlSnHtYqVwGaOrTjQlFsOfOfBfOtAhWdFwXsAuAsZuHhGiXkVeKiFtRrPaDtJoDzTnVmWzSuLmUmOjTjLmFhZiTsFoZyBiSdYqIbToAdTyOnEdCsOhZvRqWcYxMlPaCyEbGdQxRcBzAwIiUdUkHeJuEjGzSwSuIgWmYwLbDtBeRnXsAaQkLaZrJrPnNxOxVrMcKuZpLaHlUoAtRhDsVl"/>
+                <setInputField description="set companyCode" name="companyCode" value="Ao"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jsysBankDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysBank.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JsysBank -->
+    <target name="AddJsysBank" description="Adds a new JsysBank">
+        <webtest name="addJsysBank">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jsysBankform"/>
+                <verifytitle description="we should see the jsysBankDetail title"
+                    text=".*${jsysBankDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set bankKey" name="bankKey" value="IaMqXoOvIaViAlRbVwSjNtMsYqQgZtOtDmNmPgVgFdKwRuWhBzLiYrBaFsZxHxNzHgYkBsQpYrFbUfYcLkXnUpJoJuXmTtFnEaCzLlLkBnThRrGhWqZgCgOpYrKzBdAsRsQsBcStYcEaLaUxByTrEfWuArYaXoNcKhJnBmLtGgXpTpNoJxBnUiRlAbHkNrRdOcZcDmRkLbDvDeLhKcSiYdPaVrYdMsIvRaNqSnIbMgDfGbUiGgStEfBwHpUoVfAcGjIxNzDmYmDzSoDpTlWeBaXjTmYtFaAtRsHjVbFoFdBc"/>
+                <setInputField description="set bankValue" name="bankValue" value="CmLvEtKqBpHbCuUjUpLpKaEwRzNlDiFmVaNoWwIwDbCfSjMhOnZnRaJdUdPiQeCsYbMwRiKqQrEtDjHcXgNjUaSyAqUcXcYoQgAuWpWlDaDyLfVgNyDrPrUfYiMxNsUlBaZoDuFkSjGyLdUxEaLsFeEsUrQcCrRgUcInEjBgLmThMrNwOmCtWtHnMeVfAbFjAxHxUdVtFkEoGlQqCrNvKeGgBuApNrDcKsTgIqVjRwBlBjRwNgVnIvYeJzCyVwLyWmUpHpKbKnBaZaNfJrIwAsNtRqJcXnOuXpRkBtUkQsWg"/>
+                <setInputField description="set companyCode" name="companyCode" value="Yc"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JsysBank List appears if save successful"
+                    text=".*${jsysBankList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysBank.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jsysBank -->
+    <target name="DeleteJsysBank" description="Deletes existing JsysBank">
+        <webtest name="deleteJsysBank">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysBank link" url="/jsysBankform?bankId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JsysBank List" text=".*${jsysBankList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysBank.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JsysBank-END-->
+    <!--JsysLoginLog-START-->
+    <!-- runs jsysLoginLog-related tests -->
+    <target name="JsysLoginLogTests"
+            depends="SearchJsysLoginLogs,EditJsysLoginLog,SaveJsysLoginLog,AddJsysLoginLog,DeleteJsysLoginLog"
+            description="Call and executes all jsysLoginLog test cases (targets)">
+        <echo>Successfully ran all JsysLoginLog UI tests!</echo>
+    </target>
+
+    <!-- Verify the jsysLoginLogs list screen displays without errors -->
+    <target name="SearchJsysLoginLogs" description="Tests search for and displaying all jsysLoginLogs">
+        <webtest name="searchJsysLoginLogs">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JsysLoginLog link" url="/jsysLoginLogs"/>
+                <verifytitle description="we should see the jsysLoginLogList title"
+                    text=".*${jsysLoginLogList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jsysLoginLogList title"
+                    text=".*${jsysLoginLogList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jsysLoginLog screen displays without errors -->
+    <target name="EditJsysLoginLog" description="Tests editing an existing JsysLoginLog's information">
+        <webtest name="editJsysLoginLog">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JsysLoginLog List" url="/jsysLoginLogs"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jsysLoginLogDetail title"
+                    text=".*${jsysLoginLogDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jsysLoginLog and then save -->
+    <target name="SaveJsysLoginLog" description="Tests editing and saving a jsysLoginLog">
+        <webtest name="saveJsysLoginLog">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysLoginLog link" url="/jsysLoginLogform?llId=-1"/>
+                <verifytitle description="we should see the jsysLoginLogDetail title"
+                    text=".*${jsysLoginLogDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jsysLoginLogDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysLoginLog.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JsysLoginLog -->
+    <target name="AddJsysLoginLog" description="Adds a new JsysLoginLog">
+        <webtest name="addJsysLoginLog">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jsysLoginLogform"/>
+                <verifytitle description="we should see the jsysLoginLogDetail title"
+                    text=".*${jsysLoginLogDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JsysLoginLog List appears if save successful"
+                    text=".*${jsysLoginLogList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysLoginLog.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jsysLoginLog -->
+    <target name="DeleteJsysLoginLog" description="Deletes existing JsysLoginLog">
+        <webtest name="deleteJsysLoginLog">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JsysLoginLog link" url="/jsysLoginLogform?llId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JsysLoginLog List" text=".*${jsysLoginLogList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jsysLoginLog.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JsysLoginLog-END-->
+    <!--JmiMemberUpgradeNote-START-->
+    <!-- runs jmiMemberUpgradeNote-related tests -->
+    <target name="JmiMemberUpgradeNoteTests"
+            depends="SearchJmiMemberUpgradeNotes,EditJmiMemberUpgradeNote,SaveJmiMemberUpgradeNote,AddJmiMemberUpgradeNote,DeleteJmiMemberUpgradeNote"
+            description="Call and executes all jmiMemberUpgradeNote test cases (targets)">
+        <echo>Successfully ran all JmiMemberUpgradeNote UI tests!</echo>
+    </target>
+
+    <!-- Verify the jmiMemberUpgradeNotes list screen displays without errors -->
+    <target name="SearchJmiMemberUpgradeNotes" description="Tests search for and displaying all jmiMemberUpgradeNotes">
+        <webtest name="searchJmiMemberUpgradeNotes">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JmiMemberUpgradeNote link" url="/jmiMemberUpgradeNotes"/>
+                <verifytitle description="we should see the jmiMemberUpgradeNoteList title"
+                    text=".*${jmiMemberUpgradeNoteList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jmiMemberUpgradeNoteList title"
+                    text=".*${jmiMemberUpgradeNoteList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jmiMemberUpgradeNote screen displays without errors -->
+    <target name="EditJmiMemberUpgradeNote" description="Tests editing an existing JmiMemberUpgradeNote's information">
+        <webtest name="editJmiMemberUpgradeNote">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JmiMemberUpgradeNote List" url="/jmiMemberUpgradeNotes"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jmiMemberUpgradeNoteDetail title"
+                    text=".*${jmiMemberUpgradeNoteDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jmiMemberUpgradeNote and then save -->
+    <target name="SaveJmiMemberUpgradeNote" description="Tests editing and saving a jmiMemberUpgradeNote">
+        <webtest name="saveJmiMemberUpgradeNote">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JmiMemberUpgradeNote link" url="/jmiMemberUpgradeNoteform?munId=-1"/>
+                <verifytitle description="we should see the jmiMemberUpgradeNoteDetail title"
+                    text=".*${jmiMemberUpgradeNoteDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set companyCode" name="companyCode" value="Lo"/>
+                <setInputField description="set newCard" name="newCard" value="J"/>
+                <setInputField description="set oldCard" name="oldCard" value="R"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jmiMemberUpgradeNoteDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jmiMemberUpgradeNote.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JmiMemberUpgradeNote -->
+    <target name="AddJmiMemberUpgradeNote" description="Adds a new JmiMemberUpgradeNote">
+        <webtest name="addJmiMemberUpgradeNote">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jmiMemberUpgradeNoteform"/>
+                <verifytitle description="we should see the jmiMemberUpgradeNoteDetail title"
+                    text=".*${jmiMemberUpgradeNoteDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set companyCode" name="companyCode" value="Lp"/>
+                <setInputField description="set newCard" name="newCard" value="O"/>
+                <setInputField description="set oldCard" name="oldCard" value="L"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JmiMemberUpgradeNote List appears if save successful"
+                    text=".*${jmiMemberUpgradeNoteList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jmiMemberUpgradeNote.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jmiMemberUpgradeNote -->
+    <target name="DeleteJmiMemberUpgradeNote" description="Deletes existing JmiMemberUpgradeNote">
+        <webtest name="deleteJmiMemberUpgradeNote">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JmiMemberUpgradeNote link" url="/jmiMemberUpgradeNoteform?munId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JmiMemberUpgradeNote List" text=".*${jmiMemberUpgradeNoteList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jmiMemberUpgradeNote.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JmiMemberUpgradeNote-END-->
+    
+    <!--JpmProductWineTemplateSub-START-->
+    <!-- runs jpmProductWineTemplateSub-related tests -->
+    <target name="JpmProductWineTemplateSubTests"
+            depends="SearchJpmProductWineTemplateSubs,EditJpmProductWineTemplateSub,SaveJpmProductWineTemplateSub,AddJpmProductWineTemplateSub,DeleteJpmProductWineTemplateSub"
+            description="Call and executes all jpmProductWineTemplateSub test cases (targets)">
+        <echo>Successfully ran all JpmProductWineTemplateSub UI tests!</echo>
+    </target>
+
+    <!-- Verify the jpmProductWineTemplateSubs list screen displays without errors -->
+    <target name="SearchJpmProductWineTemplateSubs" description="Tests search for and displaying all jpmProductWineTemplateSubs">
+        <webtest name="searchJpmProductWineTemplateSubs">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JpmProductWineTemplateSub link" url="/jpmProductWineTemplateSubs"/>
+                <verifytitle description="we should see the jpmProductWineTemplateSubList title"
+                    text=".*${jpmProductWineTemplateSubList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jpmProductWineTemplateSubList title"
+                    text=".*${jpmProductWineTemplateSubList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jpmProductWineTemplateSub screen displays without errors -->
+    <target name="EditJpmProductWineTemplateSub" description="Tests editing an existing JpmProductWineTemplateSub's information">
+        <webtest name="editJpmProductWineTemplateSub">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JpmProductWineTemplateSub List" url="/jpmProductWineTemplateSubs"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jpmProductWineTemplateSubDetail title"
+                    text=".*${jpmProductWineTemplateSubDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jpmProductWineTemplateSub and then save -->
+    <target name="SaveJpmProductWineTemplateSub" description="Tests editing and saving a jpmProductWineTemplateSub">
+        <webtest name="saveJpmProductWineTemplateSub">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpmProductWineTemplateSub link" url="/jpmProductWineTemplateSubform?subNo=-1"/>
+                <verifytitle description="we should see the jpmProductWineTemplateSubDetail title"
+                    text=".*${jpmProductWineTemplateSubDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jpmProductWineTemplateSubDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmProductWineTemplateSub.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JpmProductWineTemplateSub -->
+    <target name="AddJpmProductWineTemplateSub" description="Adds a new JpmProductWineTemplateSub">
+        <webtest name="addJpmProductWineTemplateSub">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jpmProductWineTemplateSubform"/>
+                <verifytitle description="we should see the jpmProductWineTemplateSubDetail title"
+                    text=".*${jpmProductWineTemplateSubDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JpmProductWineTemplateSub List appears if save successful"
+                    text=".*${jpmProductWineTemplateSubList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmProductWineTemplateSub.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jpmProductWineTemplateSub -->
+    <target name="DeleteJpmProductWineTemplateSub" description="Deletes existing JpmProductWineTemplateSub">
+        <webtest name="deleteJpmProductWineTemplateSub">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpmProductWineTemplateSub link" url="/jpmProductWineTemplateSubform?subNo=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JpmProductWineTemplateSub List" text=".*${jpmProductWineTemplateSubList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmProductWineTemplateSub.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JpmProductWineTemplateSub-END-->
+    
+    
+    <!--JpmProductWineTemplate-START-->
+    <!-- runs jpmProductWineTemplate-related tests -->
+    <target name="JpmProductWineTemplateTests"
+            depends="SearchJpmProductWineTemplates,EditJpmProductWineTemplate,SaveJpmProductWineTemplate,AddJpmProductWineTemplate,DeleteJpmProductWineTemplate"
+            description="Call and executes all jpmProductWineTemplate test cases (targets)">
+        <echo>Successfully ran all JpmProductWineTemplate UI tests!</echo>
+    </target>
+
+    <!-- Verify the jpmProductWineTemplates list screen displays without errors -->
+    <target name="SearchJpmProductWineTemplates" description="Tests search for and displaying all jpmProductWineTemplates">
+        <webtest name="searchJpmProductWineTemplates">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JpmProductWineTemplate link" url="/jpmProductWineTemplates"/>
+                <verifytitle description="we should see the jpmProductWineTemplateList title"
+                    text=".*${jpmProductWineTemplateList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jpmProductWineTemplateList title"
+                    text=".*${jpmProductWineTemplateList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jpmProductWineTemplate screen displays without errors -->
+    <target name="EditJpmProductWineTemplate" description="Tests editing an existing JpmProductWineTemplate's information">
+        <webtest name="editJpmProductWineTemplate">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JpmProductWineTemplate List" url="/jpmProductWineTemplates"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jpmProductWineTemplateDetail title"
+                    text=".*${jpmProductWineTemplateDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jpmProductWineTemplate and then save -->
+    <target name="SaveJpmProductWineTemplate" description="Tests editing and saving a jpmProductWineTemplate">
+        <webtest name="saveJpmProductWineTemplate">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpmProductWineTemplate link" url="/jpmProductWineTemplateform?productTemplateNo=-1"/>
+                <verifytitle description="we should see the jpmProductWineTemplateDetail title"
+                    text=".*${jpmProductWineTemplateDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jpmProductWineTemplateDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmProductWineTemplate.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JpmProductWineTemplate -->
+    <target name="AddJpmProductWineTemplate" description="Adds a new JpmProductWineTemplate">
+        <webtest name="addJpmProductWineTemplate">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jpmProductWineTemplateform"/>
+                <verifytitle description="we should see the jpmProductWineTemplateDetail title"
+                    text=".*${jpmProductWineTemplateDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JpmProductWineTemplate List appears if save successful"
+                    text=".*${jpmProductWineTemplateList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmProductWineTemplate.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jpmProductWineTemplate -->
+    <target name="DeleteJpmProductWineTemplate" description="Deletes existing JpmProductWineTemplate">
+        <webtest name="deleteJpmProductWineTemplate">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpmProductWineTemplate link" url="/jpmProductWineTemplateform?productTemplateNo=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JpmProductWineTemplate List" text=".*${jpmProductWineTemplateList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmProductWineTemplate.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JpmProductWineTemplate-END-->
+    <!--JpmWineTemplatePicture-START-->
+    <!-- runs jpmWineTemplatePicture-related tests -->
+    <target name="JpmWineTemplatePictureTests"
+            depends="SearchJpmWineTemplatePictures,EditJpmWineTemplatePicture,SaveJpmWineTemplatePicture,AddJpmWineTemplatePicture,DeleteJpmWineTemplatePicture"
+            description="Call and executes all jpmWineTemplatePicture test cases (targets)">
+        <echo>Successfully ran all JpmWineTemplatePicture UI tests!</echo>
+    </target>
+
+    <!-- Verify the jpmWineTemplatePictures list screen displays without errors -->
+    <target name="SearchJpmWineTemplatePictures" description="Tests search for and displaying all jpmWineTemplatePictures">
+        <webtest name="searchJpmWineTemplatePictures">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JpmWineTemplatePicture link" url="/jpmWineTemplatePictures"/>
+                <verifytitle description="we should see the jpmWineTemplatePictureList title"
+                    text=".*${jpmWineTemplatePictureList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jpmWineTemplatePictureList title"
+                    text=".*${jpmWineTemplatePictureList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jpmWineTemplatePicture screen displays without errors -->
+    <target name="EditJpmWineTemplatePicture" description="Tests editing an existing JpmWineTemplatePicture's information">
+        <webtest name="editJpmWineTemplatePicture">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JpmWineTemplatePicture List" url="/jpmWineTemplatePictures"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jpmWineTemplatePictureDetail title"
+                    text=".*${jpmWineTemplatePictureDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jpmWineTemplatePicture and then save -->
+    <target name="SaveJpmWineTemplatePicture" description="Tests editing and saving a jpmWineTemplatePicture">
+        <webtest name="saveJpmWineTemplatePicture">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpmWineTemplatePicture link" url="/jpmWineTemplatePictureform?idf=-1"/>
+                <verifytitle description="we should see the jpmWineTemplatePictureDetail title"
+                    text=".*${jpmWineTemplatePictureDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jpmWineTemplatePictureDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmWineTemplatePicture.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JpmWineTemplatePicture -->
+    <target name="AddJpmWineTemplatePicture" description="Adds a new JpmWineTemplatePicture">
+        <webtest name="addJpmWineTemplatePicture">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jpmWineTemplatePictureform"/>
+                <verifytitle description="we should see the jpmWineTemplatePictureDetail title"
+                    text=".*${jpmWineTemplatePictureDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JpmWineTemplatePicture List appears if save successful"
+                    text=".*${jpmWineTemplatePictureList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmWineTemplatePicture.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jpmWineTemplatePicture -->
+    <target name="DeleteJpmWineTemplatePicture" description="Deletes existing JpmWineTemplatePicture">
+        <webtest name="deleteJpmWineTemplatePicture">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpmWineTemplatePicture link" url="/jpmWineTemplatePictureform?idf=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JpmWineTemplatePicture List" text=".*${jpmWineTemplatePictureList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmWineTemplatePicture.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JpmWineTemplatePicture-END-->
+
+    <!--JfiPosImport-START-->
+    <!-- runs jfiPosImport-related tests -->
+    <target name="JfiPosImportTests"
+            depends="SearchJfiPosImports,EditJfiPosImport,SaveJfiPosImport,AddJfiPosImport,DeleteJfiPosImport"
+            description="Call and executes all jfiPosImport test cases (targets)">
+        <echo>Successfully ran all JfiPosImport UI tests!</echo>
+    </target>
+
+    <!-- Verify the jfiPosImports list screen displays without errors -->
+    <target name="SearchJfiPosImports" description="Tests search for and displaying all jfiPosImports">
+        <webtest name="searchJfiPosImports">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JfiPosImport link" url="/jfiPosImports"/>
+                <verifytitle description="we should see the jfiPosImportList title"
+                    text=".*${jfiPosImportList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jfiPosImportList title"
+                    text=".*${jfiPosImportList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jfiPosImport screen displays without errors -->
+    <target name="EditJfiPosImport" description="Tests editing an existing JfiPosImport's information">
+        <webtest name="editJfiPosImport">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JfiPosImport List" url="/jfiPosImports"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jfiPosImportDetail title"
+                    text=".*${jfiPosImportDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jfiPosImport and then save -->
+    <target name="SaveJfiPosImport" description="Tests editing and saving a jfiPosImport">
+        <webtest name="saveJfiPosImport">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JfiPosImport link" url="/jfiPosImportform?jpiId=-1"/>
+                <verifytitle description="we should see the jfiPosImportDetail title"
+                    text=".*${jfiPosImportDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+                <setInputField description="set PId" name="PId" value="IhXeWcVeZwSqZaYwLuNbIeNdQmEyXsJdMcKsYeFsFwRmJgXnYfAfKyPzPsDcWqOeHwSdLeOeVxFqWuPjMxBhNxCiMpNfBeNcRbMxGoXcOcWtUiVrTaGhZoGrZtTySpMvTxNhRbMbCiTfYwEjVqYeTdPkTpXpQuWgExLcBqQqBxIeWsRcGkJiZwFiDtUvQbPfPaVvSkQr"/>
+                <setInputField description="set amount" name="amount" value="3108016091960469504"/>
+                <setInputField description="set createTime" name="createTime" value="11/29/2013"/>
+                <setInputField description="set createUser" name="createUser" value="HjEuVtZaVoMoRlTiFxYrBoUoPsBhGfWwBcTqQeKgLjOwJzKlDyZpDhTmZbFyCyNiAtJeWqFpJsCxQsEzOxLbXcHcBuGkCyPjAaTrPzXjFzOsQkNtPpBpWcZuJuXpHgBvKiEqWlLoAxHtQfMsWaWcRuApAkCbKsJpBtHtDmYlQoLaBsWfZeOmCsSdNxOjDvGeXpZgIhVb"/>
+                <setInputField description="set posNo" name="posNo" value="HnHvPxRpPhCkYmHxZpRtBgXaAzQjWgHjImPiUtRuJaIqMcRzOtPfTcZxRzMeExRdJwObPvNjIaKgPdZrDaTnFdMiGoNnHzPrNbSuPcQvQtTmEvUnFeKxGfHoJgFjTuVhAlHnWhXaKrZlNsYvExOnMeKtNrUiSuVhZzNyVeExSjJhCbOaRyZrKvZeWoTiOlEeOzRwQeGp"/>
+                <setInputField description="set status" name="status" value="Eg"/>
+                <setInputField description="set tel" name="tel" value="GvQiGnIkWtRhGaAyMsHhOaAeXfJmAmIiDuLvPtQpEyUmXbLpImMjWfPtObCxWuSiJbVqUmErRsUyMyBsPyQuNjEePvKrMjVwXsXbUlBwCxNuKjQwEgJmZkFpObFsMnSfLhSuMyOyKzWcRyEdEnClVcIeIeMvYnIyUqKwCcDqQhHkQuXpWfBzSsPdQmStMsOdHrTpYbOu"/>
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jfiPosImportDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jfiPosImport.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JfiPosImport -->
+    <target name="AddJfiPosImport" description="Adds a new JfiPosImport">
+        <webtest name="addJfiPosImport">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jfiPosImportform"/>
+                <verifytitle description="we should see the jfiPosImportDetail title"
+                    text=".*${jfiPosImportDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+                <setInputField description="set PId" name="PId" value="MyWmBwYeYoIjRxMiKqGnFrJoSoZrNnHgTvDiGeWfUhJrVyAxOdAgLvAkJcXtQsIiNnRqVoXaNrLwIdUoAfNzZaYyMkXgWdYmYbNaJiZeNxWdFkWoBwBuNrHpQwUaKdZeAoZePoLdAlVoYiHfSeDgFvKlQaHzXjJxSbZoKkOjGzYuAiKxOaGeUxWpRiKhVoQtLwDyUsTj"/>
+                <setInputField description="set amount" name="amount" value="3334465804132577280"/>
+                <setInputField description="set createTime" name="createTime" value="11/29/2013"/>
+                <setInputField description="set createUser" name="createUser" value="HxLsZyUtSuJmCjCmNgCwPxXsXjUfWqEfNmCiUtFhGhXsUkXdPcTsWdNyMzBbWrCqVjFkDnGoPzNmGoIrArRzRnXoImKpVvPyDzTkHvIyDhEnUtPhAnDlFcWnQbGsNqNoXtJpCmIcUzEiTwOqKdUpNwLwQbJqCiNyViTdIcTxUjBqHrThDnUiUuOpHcUaKoSwYoGjZwJg"/>
+                <setInputField description="set posNo" name="posNo" value="FsGcUzXvWwWwYgLwCuSeJvTwQwRmCrWrNxPcEyJpBwWcKxShQhVtJuUuQaIjNhUjIoHcXqUiRpOzDjGsSzYhHgEaGaQuFbAkOdCxPcOlElMhBrZyDaNmQyZjVeJoOrBkSkPjSgTdQnGpLkYzUsBlWxAtRnSiHfVdPfCkMlXeZzWpUrUjTsCcYwZwXoKiXkVpYlJbKyTo"/>
+                <setInputField description="set status" name="status" value="Yd"/>
+                <setInputField description="set tel" name="tel" value="UjXuHyTqWeGeYxXcXoOhFiQeVxIxItPaNjErImXxCcTmAeQiDbTyIuAeXuQlHsUeBfCdAdRvZjInGdOkIqRrNfKqYtUaLzJsHzBrZnAaMbGvWiRzZoObErCfTcYzPwYoUtNgBqXwZqIkVhQbKuHvVfFzBzHqQeRySeEsDnCjXzUuGtJjDhNkVlFgTxReVvNgAsOxLnXl"/>
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JfiPosImport List appears if save successful"
+                    text=".*${jfiPosImportList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jfiPosImport.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jfiPosImport -->
+    <target name="DeleteJfiPosImport" description="Deletes existing JfiPosImport">
+        <webtest name="deleteJfiPosImport">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JfiPosImport link" url="/jfiPosImportform?jpiId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JfiPosImport List" text=".*${jfiPosImportList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jfiPosImport.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JfiPosImport-END-->
+    <!--JpmWineOrderInterface-START-->
+    <!-- runs jpmWineOrderInterface-related tests -->
+    <target name="JpmWineOrderInterfaceTests"
+            depends="SearchJpmWineOrderInterfaces,EditJpmWineOrderInterface,SaveJpmWineOrderInterface,AddJpmWineOrderInterface,DeleteJpmWineOrderInterface"
+            description="Call and executes all jpmWineOrderInterface test cases (targets)">
+        <echo>Successfully ran all JpmWineOrderInterface UI tests!</echo>
+    </target>
+
+    <!-- Verify the jpmWineOrderInterfaces list screen displays without errors -->
+    <target name="SearchJpmWineOrderInterfaces" description="Tests search for and displaying all jpmWineOrderInterfaces">
+        <webtest name="searchJpmWineOrderInterfaces">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JpmWineOrderInterface link" url="/jpmWineOrderInterfaces"/>
+                <verifytitle description="we should see the jpmWineOrderInterfaceList title"
+                    text=".*${jpmWineOrderInterfaceList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jpmWineOrderInterfaceList title"
+                    text=".*${jpmWineOrderInterfaceList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jpmWineOrderInterface screen displays without errors -->
+    <target name="EditJpmWineOrderInterface" description="Tests editing an existing JpmWineOrderInterface's information">
+        <webtest name="editJpmWineOrderInterface">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JpmWineOrderInterface List" url="/jpmWineOrderInterfaces"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jpmWineOrderInterfaceDetail title"
+                    text=".*${jpmWineOrderInterfaceDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jpmWineOrderInterface and then save -->
+    <target name="SaveJpmWineOrderInterface" description="Tests editing and saving a jpmWineOrderInterface">
+        <webtest name="saveJpmWineOrderInterface">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpmWineOrderInterface link" url="/jpmWineOrderInterfaceform?moId=-1"/>
+                <verifytitle description="we should see the jpmWineOrderInterfaceDetail title"
+                    text=".*${jpmWineOrderInterfaceDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jpmWineOrderInterfaceDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmWineOrderInterface.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JpmWineOrderInterface -->
+    <target name="AddJpmWineOrderInterface" description="Adds a new JpmWineOrderInterface">
+        <webtest name="addJpmWineOrderInterface">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jpmWineOrderInterfaceform"/>
+                <verifytitle description="we should see the jpmWineOrderInterfaceDetail title"
+                    text=".*${jpmWineOrderInterfaceDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JpmWineOrderInterface List appears if save successful"
+                    text=".*${jpmWineOrderInterfaceList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmWineOrderInterface.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jpmWineOrderInterface -->
+    <target name="DeleteJpmWineOrderInterface" description="Deletes existing JpmWineOrderInterface">
+        <webtest name="deleteJpmWineOrderInterface">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpmWineOrderInterface link" url="/jpmWineOrderInterfaceform?moId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JpmWineOrderInterface List" text=".*${jpmWineOrderInterfaceList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmWineOrderInterface.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JpmWineOrderInterface-END-->
+    <!--JpmWineSettingInf-START-->
+    <!-- runs jpmWineSettingInf-related tests -->
+    <target name="JpmWineSettingInfTests"
+            depends="SearchJpmWineSettingInfs,EditJpmWineSettingInf,SaveJpmWineSettingInf,AddJpmWineSettingInf,DeleteJpmWineSettingInf"
+            description="Call and executes all jpmWineSettingInf test cases (targets)">
+        <echo>Successfully ran all JpmWineSettingInf UI tests!</echo>
+    </target>
+
+    <!-- Verify the jpmWineSettingInfs list screen displays without errors -->
+    <target name="SearchJpmWineSettingInfs" description="Tests search for and displaying all jpmWineSettingInfs">
+        <webtest name="searchJpmWineSettingInfs">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click View JpmWineSettingInf link" url="/jpmWineSettingInfs"/>
+                <verifytitle description="we should see the jpmWineSettingInfList title"
+                    text=".*${jpmWineSettingInfList.title}.*" regex="true"/>
+                <setinputfield description="set search term" name="q" value="*"/>
+                <clickbutton label="${button.search}" description="Click Search"/>
+                <verifytitle description="we should see the jpmWineSettingInfList title"
+                    text=".*${jpmWineSettingInfList.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Verify the edit jpmWineSettingInf screen displays without errors -->
+    <target name="EditJpmWineSettingInf" description="Tests editing an existing JpmWineSettingInf's information">
+        <webtest name="editJpmWineSettingInf">
+            &config;
+            <steps>
+                &login;
+                <invoke description="View JpmWineSettingInf List" url="/jpmWineSettingInfs"/>
+                <clicklink label="-1" description="Click edit link"/>
+                <verifytitle description="we should see the jpmWineSettingInfDetail title"
+                    text=".*${jpmWineSettingInfDetail.title}.*" regex="true"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Edit a jpmWineSettingInf and then save -->
+    <target name="SaveJpmWineSettingInf" description="Tests editing and saving a jpmWineSettingInf">
+        <webtest name="saveJpmWineSettingInf">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpmWineSettingInf link" url="/jpmWineSettingInfform?settingId=-1"/>
+                <verifytitle description="we should see the jpmWineSettingInfDetail title"
+                    text=".*${jpmWineSettingInfDetail.title}.*" regex="true"/>
+
+                <!-- update some of the required fields -->
+
+                <clickbutton label="${button.save}" description="Click Save"/>
+                <verifytitle description="Page re-appears if save successful"
+                    text=".*${jpmWineSettingInfDetail.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmWineSettingInf.updated}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Add a new JpmWineSettingInf -->
+    <target name="AddJpmWineSettingInf" description="Adds a new JpmWineSettingInf">
+        <webtest name="addJpmWineSettingInf">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Add Button" url="/jpmWineSettingInfform"/>
+                <verifytitle description="we should see the jpmWineSettingInfDetail title"
+                    text=".*${jpmWineSettingInfDetail.title}.*" regex="true"/>
+
+                <!-- enter required fields -->
+
+                <clickbutton label="${button.save}" description="Click button 'Save'"/>
+                <verifytitle description="JpmWineSettingInf List appears if save successful"
+                    text=".*${jpmWineSettingInfList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmWineSettingInf.added}"/>
+            </steps>
+        </webtest>
+    </target>
+
+    <!-- Delete existing jpmWineSettingInf -->
+    <target name="DeleteJpmWineSettingInf" description="Deletes existing JpmWineSettingInf">
+        <webtest name="deleteJpmWineSettingInf">
+            &config;
+            <steps>
+                &login;
+                <invoke description="click Edit JpmWineSettingInf link" url="/jpmWineSettingInfform?settingId=-1"/>
+                <prepareDialogResponse description="Confirm delete" dialogType="confirm" response="true"/>
+                <clickbutton label="${button.delete}" description="Click button 'Delete'"/>
+                <verifyNoDialogResponses/>
+                <verifytitle description="display JpmWineSettingInf List" text=".*${jpmWineSettingInfList.title}.*" regex="true"/>
+                <verifytext description="verify success message" text="${jpmWineSettingInf.deleted}"/>
+            </steps>
+        </webtest>
+    </target>    <!--JpmWineSettingInf-END-->
+</project>
+

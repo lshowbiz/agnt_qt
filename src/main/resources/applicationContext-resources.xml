@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.0.xsd">
+
+    <!-- For mail settings and future properties files -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:jdbc.properties</value>
+                <value>classpath:mail.properties</value>
+                <value>classpath:hibernate.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- JNDI DataSource for J2EE environments -->
+    <!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/appfuse"/>-->
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@10.10.88.48:1521:jmdb1"/>
+        <property name="username" value="anjm"/>
+        <property name="password" value="anjmtest"/>
+        <property name="maxActive" value="5"/>
+        <property name="maxWait" value="1000"/>
+		<property name="initialSize" value="5"/>
+		<property name="removeAbandoned" value="true"/>
+		<property name="removeAbandonedTimeout" value="180"/>
+		<property name="testWhileIdle" value="true" />
+		<property name="validationQuery">  
+			<value>SELECT 1 from dual</value>  
+		</property> 
+		<property name="timeBetweenEvictionRunsMillis" value="300000"/>  
+        <property name="numTestsPerEvictionRun" value="10"/>  
+        <property name="minEvictableIdleTimeMillis" value="12000000"/>
+    </bean>
+    
+    <bean id="dataSource2" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@10.10.88.48:1521:jmdb1"/>
+        <property name="username" value="anjm"/>
+        <property name="password" value="anjmtest"/>
+        <property name="maxActive" value="5"/>
+        <property name="maxWait" value="1000"/>
+		<property name="initialSize" value="5"/>
+		<property name="removeAbandoned" value="true"/>
+		<property name="removeAbandonedTimeout" value="180"/>
+		<property name="testWhileIdle" value="true" />
+		<property name="validationQuery">  
+			<value>SELECT 1 from dual</value>  
+		</property> 
+		<property name="timeBetweenEvictionRunsMillis" value="300000"/>  
+        <property name="numTestsPerEvictionRun" value="10"/>  
+        <property name="minEvictableIdleTimeMillis" value="12000000"/>
+    </bean>
+    
+    <bean id="dataSource3" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@10.10.88.48:1521:jmdb1"/>
+        <property name="username" value="anjm"/>
+        <property name="password" value="anjmtest"/>
+        <property name="maxActive" value="5"/>
+        <property name="maxWait" value="1000"/>
+		<property name="initialSize" value="5"/>
+		<property name="removeAbandoned" value="true"/>
+		<property name="removeAbandonedTimeout" value="180"/>
+		<property name="testWhileIdle" value="true" />
+		<property name="validationQuery">  
+			<value>SELECT 1 from dual</value>  
+		</property> 
+		<property name="timeBetweenEvictionRunsMillis" value="300000"/>  
+        <property name="numTestsPerEvictionRun" value="10"/>  
+        <property name="minEvictableIdleTimeMillis" value="12000000"/>
+    </bean>
+    
+	<bean id="dataSourceBi" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@10.10.88.48:1521:jmdb1"/>
+        <property name="username" value="anjm"/>
+        <property name="password" value="anjmtest"/>
+        <property name="maxActive" value="5"/>
+        <property name="maxWait" value="1000"/>
+		<property name="initialSize" value="5"/>
+		<property name="removeAbandoned" value="true"/>
+		<property name="removeAbandonedTimeout" value="180"/>
+		<property name="testWhileIdle" value="true" />
+		<property name="validationQuery">  
+			<value>SELECT 1 from dual</value>  
+		</property> 
+		<property name="timeBetweenEvictionRunsMillis" value="300000"/>  
+        <property name="numTestsPerEvictionRun" value="10"/>  
+        <property name="minEvictableIdleTimeMillis" value="12000000"/>
+    </bean>
+</beans>

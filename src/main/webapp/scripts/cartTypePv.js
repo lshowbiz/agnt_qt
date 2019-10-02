@@ -1,0 +1,1 @@
+[{"cartType":"1","cartValue":"优惠顾客","orderPv":0},{"cartType":"2","cartValue":"金级","orderPv":350},{"cartType":"3","cartValue":"白金","orderPv":700},{"cartType":"4","cartValue":"钻石","orderPv":1400},{"cartType":"5","cartValue":"VIP","orderPv":2750}]

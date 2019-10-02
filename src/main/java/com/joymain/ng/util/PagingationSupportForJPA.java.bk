@@ -1,0 +1,223 @@
+package com.joymain.ng.util;
+
+import java.util.LinkedHashMap;
+
+import org.springframework.jdbc.BadSqlGrammarException;
+
+public class PagingationSupportForJPA extends AbstractDAO {
+	/**
+	 * 根据实体 当前页码，单页记录数 Class,条件，参数 分页查询记录，并且排序 实体必须使用符合JPA规范的注解进行配置
+	 * 
+	 * @param currentPage
+	 *            当前页码
+	 * @param pageSize
+	 *            单页记录数
+	 * @param preparedParameterArray
+	 *            new Object[]{13}
+	 * @param queryForListQHL
+	 *            </br>HQL语句 <code>select o from User o where o.id >?
+	 * </br>或者from User o where o.id >?</code>
+	 * 
+	 */
+	protected final <T> Pager<T> queryForPaginationList(int currentPage,
+			int pageSize, String queryForListHQL,
+			Object[] preparedParameterArray) {
+		int dataCount = this.getTotalObjects(queryForListHQL, preparedParameterArray);
+		Pager<T> Pager = new Pager<T>(dataCount, currentPage,
+				pageSize);
+		Pager.setPageList(queryForList(queryForListHQL,
+				preparedParameterArray, Pager.getFirstResult(),
+				Pager.getEndResult()));
+		return Pager;
+	}
+
+	/**
+	 * 根据实体 当前页码，单页记录数 Class,条件，参数 分页查询记录，并且排序 实体必须使用符合JPA规范的注解进行配置
+	 * 
+	 * @param currentPage
+	 *            当前页码
+	 * @param pageSize
+	 *            单页记录数
+	 * @param queryForListQHL
+	 *            </br>HQL语句 <code>select o from User o where o.id > 10
+	 * </br>或者from User o where o.id >10</code>
+	 */
+	protected final <T> Pager<T> queryForPaginationList(int currentPage,
+			int pageSize, String queryForListHQL) {
+		return this.queryForPaginationList(currentPage, pageSize,
+				queryForListHQL, null);
+	}
+
+	/**
+	 * 根据实体 当前页码，单页记录数 Class,条件，参数 分页查询记录，并且排序 实体必须使用符合JPA规范的注解进行配置
+	 * 
+	 * @param currentPage
+	 *            当前页码
+	 * @param pageSize
+	 *            单页记录数
+	 * @param clazz
+	 *            需要查询的实体类
+	 * @param conditions
+	 *            put("userName","like")
+	 * @param parameterArray
+	 *            new Object[]{"%zhang%"}
+	 * @param orderBy
+	 *            put("id","asc")
+	 */
+	protected final <T> Pager<T> queryForPaginationList(int currentPage,
+			int pageSize, Class<T> clazz,
+			LinkedHashMap<String, String> conditions,
+			Object[] preparedParameterArray,
+			LinkedHashMap<String, String> orderBy) {
+		String queryForListHQL = this
+				.getQueryString(clazz, conditions, orderBy);
+		return this.queryForPaginationList(currentPage, pageSize,
+				queryForListHQL, preparedParameterArray);
+	}
+
+	/**
+	 * 根据实体 当前页码，单页记录数 Class,条件，参数 分页查询记录 实体必须使用符合JPA规范的注解进行配置
+	 * 
+	 * @param currentPage
+	 *            当前页码
+	 * @param pageSize
+	 *            单页记录数
+	 * @param clazz
+	 *            需要查询的实体类
+	 * @param conditions
+	 *            put("userName","like")
+	 * @param parameterArray
+	 *            new Object[]{"%zhang%"}
+	 */
+	protected final <T> Pager<T> queryForPaginationList(int currentPage,
+			int pageSize, Class<T> clazz,
+			LinkedHashMap<String, String> conditions,
+			Object[] preparedParameterArray) {
+		return queryForPaginationList(currentPage, pageSize, clazz, conditions,
+				preparedParameterArray, null);
+	}
+
+	/**
+	 * 根据实体 当前页码，单页记录数 Class 分页查询记录 实体必须使用符合JPA规范的注解进行配置
+	 * 
+	 * @param currentPage
+	 *            当前页码
+	 * @param pageSize
+	 *            单页记录数
+	 * @param clazz
+	 *            需要查询的实体类
+	 */
+	protected final <T> Pager<T> queryForPaginationList(int currentPage,
+			int pageSize, Class<T> clazz) {
+		return queryForPaginationList(currentPage, pageSize, clazz, null, null);
+	}
+
+	/**
+	 * 根据实体 当前页码，单页记录数 Class 分页查询记录 实体必须使用符合JPA规范的注解进行配置 默认单页数据记录数为10
+	 * 
+	 * @param currentPage
+	 *            当前页码
+	 * @param clazz
+	 *            需要查询的实体类
+	 */
+	protected final <T> Pager<T> queryForPaginationList(int currentPage,
+			Class<T> clazz) {
+		return queryForPaginationList(currentPage, clazz, null, null);
+	}
+
+	/**
+	 * 根据实体 当前页码，单页记录数 Class,条件，参数 分页查询记录 实体必须使用符合JPA规范的注解进行配置 默认单页数据记录数为10
+	 * 
+	 * @param currentPage
+	 *            当前页码
+	 * @param clazz
+	 *            需要查询的实体类
+	 * @param conditions
+	 *            put("userName","like")
+	 * @param parameterArray
+	 *            new Object[]{"%zhang%"}
+	 */
+	protected final <T> Pager<T> queryForPaginationList(int currentPage,
+			Class<T> clazz, LinkedHashMap<String, String> conditions,
+			Object[] preparedParameterArray) {
+		return queryForPaginationList(currentPage, clazz, conditions,
+				preparedParameterArray, null);
+	}
+
+	/**
+	 * 根据实体 当前页码，单页记录数 Class,条件，参数 分页查询记录，并且排序 实体必须使用符合JPA规范的注解进行配置 默认单页数据记录数为10
+	 * 
+	 * @param currentPage
+	 *            当前页码
+	 * @param pageSize
+	 *            单页记录数
+	 * @param preparedParameterArray
+	 *            new Object[]{13}
+	 * @param queryForListQHL
+	 *            </br>HQL语句 <code>select o from User o where o.id >?
+	 * </br>或者from User o where o.id >?</code>
+	 * 
+	 */
+	protected final <T> Pager<T> queryForPaginationList(int currentPage,
+			String queryForListHQL, Object[] preparedParameterArray) {
+		int totalObjects = getTotalObjects(queryForListHQL, preparedParameterArray);
+		Pager<T> Pager = new Pager<T>(totalObjects, currentPage);
+		Pager.setPageList(queryForList(queryForListHQL,
+				preparedParameterArray, Pager.getFirstResult(),
+				Pager.getEndResult()));
+		return Pager;
+	}
+
+	/**
+	 * 根据实体 当前页码，单页记录数 Class,条件，参数 分页查询记录，并且排序 实体必须使用符合JPA规范的注解进行配置 默认单页数据记录数为10
+	 * 
+	 * @param currentPage
+	 *            当前页码
+	 * @param pageSize
+	 *            单页记录数
+	 * @param queryForListQHL
+	 *            </br>HQL语句 <code>select o from User o where o.id > 10
+	 * </br>或者from User o where o.id >10</code>
+	 */
+	protected final <T> Pager<T> queryForPaginationList(int currentPage,
+			String queryForListHQL) {
+		return this.queryForPaginationList(currentPage, queryForListHQL, null);
+	}
+
+	/**
+	 * 根据实体 当前页码，单页记录数 Class,条件，参数 分页查询记录，并且排序 实体必须使用符合JPA规范的注解进行配置 默认单页数据记录数为10
+	 * 
+	 * @param currentPage
+	 *            当前页码
+	 * @param clazz
+	 *            需要查询的实体类
+	 * @param conditions
+	 *            put("userName","like")
+	 * @param parameterArray
+	 *            new Object[]{"%zhang%"}
+	 * @param orderBy
+	 *            put("id","asc")
+	 */
+	protected final <T> Pager<T> queryForPaginationList(int currentPage,
+			Class<T> clazz, LinkedHashMap<String, String> conditions,
+			Object[] preparedParameterArray,
+			LinkedHashMap<String, String> orderBy) {
+		String queryForListHQL = this
+				.getQueryString(clazz, conditions, orderBy);
+		return this.queryForPaginationList(currentPage, queryForListHQL,
+				preparedParameterArray);
+	}
+
+	private final int getTotalObjects(String queryForListHQL,
+			Object[] preparedParameterArray) {
+
+		StringBuilder countHQLBuilder = new StringBuilder(" select count(*) ");
+		try {
+			countHQLBuilder.append(queryForListHQL.substring(queryForListHQL
+					.toLowerCase().indexOf("from")));
+		} catch (RuntimeException ex) {
+			throw new BadSqlGrammarException("SQL  :  ", queryForListHQL, null);
+		}
+		return queryForInt(countHQLBuilder.toString(), preparedParameterArray);
+	}
+}

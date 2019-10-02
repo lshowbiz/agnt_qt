@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strategies xmlns="http://www.99bill.com/schema/asap/strategy"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commons="http://www.99bill.com/schema/asap/commons"
+	xsi:schemaLocation="http://www.99bill.com/schema/asap/strategy http://www.99bill.com/schema/asap/strategy.xsd
+http://www.99bill.com/schema/asap/commons http://www.99bill.com/schema/asap/commons.xsd">
+
+
+
+	<strategy>
+		<mpf>
+			<commons:member-code>10018019544</commons:member-code>
+			<commons:feature-code>F21</commons:feature-code>
+		</mpf>
+		<crypto-strategy>
+			<type>signature</type>
+			<available>true</available>
+			<algorithm-set>
+				<signature-alg>MD5WithRSA</signature-alg>
+			</algorithm-set>
+		</crypto-strategy>
+		<key-strategy>
+			<bill99-public-key-file-path>99bill[1].cert.rsa.20140728.cer</bill99-public-key-file-path>
+			<mpf-keystore>
+				<path>lexandjacky.pfx</path>
+				<key-store-type>PKCS12</key-store-type>
+				<!-- 设置keystore密码 -->
+				<key-store-password>sweetlove</key-store-password>
+				<!-- 设置私钥别名 -->
+				<alias>dinozzokey</alias>
+				<!-- 设置私钥密码 -->
+				<key-password>sweetlove</key-password>
+<!--
+ 				<path>tester.pfx</path>
+				<key-store-type>PKCS12</key-store-type>
+				<key-store-password>4321</key-store-password>
+				<alias>test-alias</alias>
+				<key-password>4321</key-password>
+-->
+			</mpf-keystore>
+		</key-strategy>
+	</strategy>
+
+
+
+<!-- 
+
+
+	<strategy>
+		<mpf>
+			<commons:member-code>10015314582</commons:member-code>
+			<commons:feature-code>F21</commons:feature-code>
+		</mpf>
+		<crypto-strategy>
+			<type>signatureAndCrypto</type>
+			<available>true</available>
+			<algorithm-set>
+				<signature-alg>MD5WithRSA</signature-alg>
+				<symmetric-alg>aes/cbc/pkcs5padding</symmetric-alg>
+				<asymmetric-alg>RSA/RAW/pkcs1Padding</asymmetric-alg>
+			</algorithm-set>
+		</crypto-strategy>
+		<key-strategy>
+			<bill99-public-key-file-path>99bill[1].cert.rsa.20140728.cer</bill99-public-key-file-path>
+			<mpf-keystore>
+				<path>tester-rsa10.pfx</path>
+				<key-store-type>PKCS12</key-store-type>
+				<key-store-password>password123</key-store-password>
+				<alias>test-alias</alias>
+				<key-password>password123</key-password>
+			</mpf-keystore>
+		</key-strategy>
+	</strategy>
+	
+
+
+
+	<strategy>
+		<mpf>
+			<commons:member-code>10015314582</commons:member-code>
+			<commons:feature-code>F29</commons:feature-code>
+		</mpf>
+		<crypto-strategy>
+			<type>messageDigest</type>
+			<algorithm-set>
+				<digest-alg>MD5</digest-alg>
+			</algorithm-set>
+		</crypto-strategy>
+		<key-strategy>
+			<md-key>8GKKMCSLHG6QUMTZ</md-key>
+		</key-strategy>
+	</strategy>
+
+
+
+	<strategy>
+		<mpf>
+			<commons:member-code>10015314582</commons:member-code>
+			<commons:feature-code>F21</commons:feature-code>
+		</mpf>
+		<crypto-strategy>
+			<type>signature</type>
+			<priority>1</priority>
+			<available>true</available>			
+			<algorithm-set>
+				<signature-alg>dsa</signature-alg>
+			</algorithm-set>
+		</crypto-strategy>
+		<key-strategy>
+			<bill99-public-key-file-path>99bill[1].cert.dsa.20140728.cer</bill99-public-key-file-path>
+			<mpf-keystore>
+				<path>tester.pfx</path>
+				<key-store-type>PKCS12</key-store-type>
+				<key-store-password>123456</key-store-password>
+				<alias>test-alias</alias>
+				<key-password>123456</key-password>
+			</mpf-keystore>
+		</key-strategy>
+	</strategy>
+
+
+
+
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- 
+		<strategy>
+		<mpf>
+			<commons:member-code>10011492686</commons:member-code>
+			<commons:feature-code>F24</commons:feature-code>
+		</mpf>
+		<crypto-strategy>
+			<type>signatureAndCrypto</type>
+			<available>true</available>
+			<algorithm-set>
+				<signature-alg>SHA1WithRSA</signature-alg>
+				<symmetric-alg>aes/cbc/pkcs5padding</symmetric-alg>
+				<asymmetric-alg>RSA/ecb/pkcs1Padding</asymmetric-alg>
+			</algorithm-set>
+		</crypto-strategy>
+		<key-strategy>
+			<bill99-public-key-file-path>rsa-public6.cer</bill99-public-key-file-path>
+			<mpf-keystore>
+				<path>99bill-private.pfx</path>
+				<key-store-type>PKCS12</key-store-type>
+				<key-store-password>99bill</key-store-password>
+				<alias>alias</alias>
+				<key-password>99bill</key-password>
+			</mpf-keystore>
+		</key-strategy>
+	</strategy>
+	
+			<strategy>
+		<mpf>
+			<commons:member-code>10015314582</commons:member-code>
+			<commons:feature-code>F30</commons:feature-code>
+		</mpf>
+		<crypto-strategy>
+			<type>signatureAndCrypto</type>
+			<available>true</available>
+			<algorithm-set>
+				<signature-alg>SHA1WithRSA</signature-alg>
+				<symmetric-alg>aes/cbc/pkcs5padding</symmetric-alg>
+				<asymmetric-alg>RSA/ecb/pkcs1Padding</asymmetric-alg>
+			</algorithm-set>
+		</crypto-strategy>
+		<key-strategy>
+			<bill99-public-key-file-path>rsa-public6.cer</bill99-public-key-file-path>
+			<mpf-keystore>
+				<path>tester.pfx</path>
+				<key-store-type>PKCS12</key-store-type>
+				<key-store-password>12345678</key-store-password>
+				<alias>test-alias</alias>
+				<key-password>12345678</key-password>
+			</mpf-keystore>
+		</key-strategy>
+	</strategy>
+	
+				<strategy>
+		<mpf>
+			<commons:member-code>10015314582</commons:member-code>
+			<commons:feature-code>F31</commons:feature-code>
+		</mpf>
+		<crypto-strategy>
+			<type>signature</type>
+			<available>true</available>
+			<algorithm-set>
+				<signature-alg>SHA1WithRSA</signature-alg>
+			</algorithm-set>
+		</crypto-strategy>
+		<key-strategy>
+			<bill99-public-key-file-path>rsa-public6.cer</bill99-public-key-file-path>
+			<mpf-keystore>
+				<path>tester.pfx</path>
+				<key-store-type>PKCS12</key-store-type>
+				<key-store-password>12345678</key-store-password>
+				<alias>test-alias</alias>
+				<key-password>12345678</key-password>
+			</mpf-keystore>
+		</key-strategy>
+	</strategy>
+	-->
+</strategies>
+

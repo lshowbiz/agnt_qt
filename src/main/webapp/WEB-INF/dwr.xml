@@ -1,0 +1,148 @@
+<!DOCTYPE dwr PUBLIC
+    "-//GetAhead Limited//DTD Direct Web Remoting 2.0//EN"
+    "http://getahead.ltd.uk/dwr/dwr20.dtd">
+<dwr>
+    <allow>
+        <create creator="spring" javascript="UserManager">
+            <param name="class" value="com.joymain.ng.service.UserManager"/>
+            <param name="beanName" value="userManager"/>
+            <include method="getUsers"/>
+        </create>
+        <convert converter="bean" match="com.joymain.ng.model.User"/>
+
+        <create creator="spring" javascript="jmiMemberManager">
+            <param name="beanName" value="jmiMemberManager"/>
+        </create>
+        <convert converter="bean"  javascript="JmiMember" match="com.joymain.ng.model.JmiMember"/>
+        <create creator="spring" javascript="jalStateProvinceManager">
+            <param name="beanName" value="jalStateProvinceManager"/>
+        </create>
+        <create creator="spring" javascript="jalCityManager">
+            <param name="beanName" value="jalCityManager"/>
+        </create>
+        <create creator="spring" javascript="jalDistrictManager">
+            <param name="beanName" value="jalDistrictManager"/>
+        </create>
+        <convert converter="hibernate3" javascript="JalDistrict" match="com.joymain.ng.model.JalDistrict"/>
+        <convert converter="hibernate3" javascript="JalCity" match="com.joymain.ng.model.JalCity"/>
+        <convert converter="hibernate3" javascript="JalStateProvince" match="com.joymain.ng.model.JalStateProvince"/>
+        
+        <create creator="spring" javascript="jpoShoppingCartOrderManager">
+            <param name="beanName" value="jpoShoppingCartOrderManager"/>
+        </create>
+        <convert converter="bean" match="com.joymain.ng.model.JpoShoppingCart"/>
+         <create creator="spring" javascript="jpoShoppingCartOrderListManager">
+            <param name="beanName" value="jpoShoppingCartOrderListManager"/>
+        </create>
+       
+         <create creator="spring" javascript="jmiAddrBookManager">
+            <param name="beanName" value="jmiAddrBookManager"/>
+        </create>
+        <convert converter="hibernate3" javascript="jmiAddrBook" match="com.joymain.ng.model.JmiAddrBook"/>
+        
+       	<convert converter="bean" javascript="Bill99" match="com.joymain.ng.util.bill99.Bill99"/>
+        
+        <create creator="spring" javascript="bill99Util">
+            <param name="beanName" value="bill99Util"/>
+        </create>
+        
+        <convert converter="bean" javascript="Chanjet" match="com.joymain.ng.util.chanjet.Chanjet"/>
+        <create creator="spring" javascript="chanjetUtil">
+            <param name="beanName" value="chanjetUtil"/>
+        </create>
+        
+        <convert converter="bean" javascript="ChannelBean" match="com.joymain.ng.util.channel.ChannelBean"/>
+        <create creator="spring" javascript="channelUtil">
+            <param name="beanName" value="channelUtil"/>
+        </create>
+        
+        <convert converter="bean" javascript="UmbPay" match="com.joymain.ng.util.umb.UmbPay"/>
+        <create creator="spring" javascript="umbPayUtil">
+            <param name="beanName" value="umbPayUtil"/>
+        </create>
+        
+        <convert converter="bean" javascript="Chinapnr" match="com.joymain.ng.util.chinapnr.Chinapnr"/>
+        <create creator="spring" javascript="chinapnrUtil">
+            <param name="beanName" value="chinapnrUtil"/>
+        </create>
+        
+        <!-- lzg易宝支付 -->
+        <convert converter="bean" javascript="YeePay" match="com.joymain.ng.util.yeepay.YeePay"/>
+        <create creator="spring" javascript="yeePayUtil">
+            <param name="beanName" value="yeePayUtil"/>
+        </create>
+        
+        <convert converter="bean" javascript="Reapal" match="com.joymain.ng.util.reapal.Reapal"/>
+        <create creator="spring" javascript="reapalUtil">
+            <param name="beanName" value="reapalUtil"/>
+        </create>
+        
+        <convert converter="bean" match="com.joymain.ng.model.RelationshipRecord"/>
+         <create creator="spring" javascript="relationshipRecordManager">
+            <param name="beanName" value="relationshipRecordManager"/>
+        </create>
+        <convert converter="hibernate3" javascript="Linkman" match="com.joymain.ng.model.Linkman"/>
+         <!-- 
+        <create creator="spring" javascript="bill99Util" scope="application">  
+            <param name="class" value="com.joymain.ng.util.bill99.Bill99UtilImpl"></param>  
+        </create> -->
+        
+        <convert converter="bean" match="com.joymain.ng.model.InwDemand"/>
+         <create creator="spring" javascript="inwDemandManager">
+            <param name="beanName" value="inwDemandManager"/>
+        </create>
+        
+        <convert converter="bean" match="com.joymain.ng.model.InwDemandsort"/>
+         <create creator="spring" javascript="inwDemandsortManager">
+            <param name="beanName" value="inwDemandsortManager"/>
+        </create>
+        
+         <create creator="spring" javascript="jmiSmsNoteManager">
+            <param name="beanName" value="jmiSmsNoteManager"/>
+        </create>
+        <!-- 发货单接口  -->
+        <create creator="spring" javascript="jpmWineOrderInterfaceManager">
+            <param name="beanName" value="jpmWineOrderInterfaceManager"/>
+        </create>
+        <!-- 配置单接口 -->
+        <create creator="spring" javascript="jpmWineSettingInfManager">
+            <param name="beanName" value="jpmWineSettingInfManager"/>
+        </create>
+        
+         <create creator="spring" javascript="jpmSendConsignmentManager">
+            <param name="beanName" value="jpmSendConsignmentManager"/>
+        </create>
+        <convert converter="hibernate3" javascript="jpmSendConsignment" match="com.joymain.ng.model.JpmSendConsignment"/>
+    	
+    	<create creator="spring" javascript="pdSendInfoManager">
+            <param name="beanName" value="pdSendInfoManager"/>
+        </create>
+        
+         <!-- 2014-12-08 -->
+        <convert converter="bean" match="com.joymain.ng.model.MailStatus"/>
+         <create creator="spring" javascript="mailStatusManager">
+            <param name="beanName" value="mailStatusManager"/>
+        </create>
+        <convert converter="bean" match="com.joymain.ng.model.Items"/>
+        
+        
+         <convert converter="bean" match="com.joymain.ng.model.PdExchangeOrder"/>
+         <create creator="spring" javascript="pdExchangeOrderManager">
+            <param name="beanName" value="pdExchangeOrderManager"/>
+        </create>
+        
+        <!-- add by lihao -->
+        <convert converter="bean" match="com.joymain.ng.model.PdExchangeOrderDetail"/>
+         <create creator="spring" javascript="pdExchangeOrderDetailManager">
+            <param name="beanName" value="pdExchangeOrderDetailManager"/>
+        </create>
+        
+         <create creator="spring" javascript="jmiLinkRefManager">
+            <param name="beanName" value="jmiLinkRefManager"/>
+        </create>
+        <!-- 新增支付增加邀请码 -->
+        <create creator="spring" javascript="jpoInviteListManager">
+            <param name="beanName" value="jpoInviteListManager"/>
+        </create>
+    </allow>
+</dwr>

@@ -1,0 +1,17 @@
+<%@ include file="/common/taglibs.jsp" %>
+
+<head>
+</head>
+
+<p>
+    <h2>Data Access Failure</h2>
+    <c:out value="${requestScope.exception.message}"/>
+</p>
+
+<!--
+<% 
+((Exception) request.getAttribute("exception")).printStackTrace(new java.io.PrintWriter(out));  
+%>
+-->
+
+<a href="mainMenu" onclick="history.back();return false">&#171; Back</a>

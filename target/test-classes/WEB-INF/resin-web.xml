@@ -1,0 +1,13 @@
+<web-app id="anjm_portal-1.0-SNAPSHOT">
+    <jsp fast-jstl="false"/>
+
+    <!--database>
+        <jndi-name>jdbc/appfuse</jndi-name>
+        <driver type="oracle.jdbc.OracleDriver">
+            <url>jdbc:oracle:thin:@192.168.5.121:1521:JMDEV5</url>
+            <user>jecs</user>
+            <password>jecs321</password>
+        </driver>
+    </database-->
+</web-app>
+

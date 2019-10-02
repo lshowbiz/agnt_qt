@@ -1,0 +1,410 @@
+#logo .sub-logo {
+	POSITION: relative
+}
+.box-sullen .mytaobao-rc-tp {
+	POSITION: relative; DISPLAY: none; HEIGHT: 4px
+}
+.box-sullen .mytaobao-rc-bt {
+	POSITION: relative; DISPLAY: none; HEIGHT: 4px
+}
+.box-diamond .mytaobao-rc-tp {
+	POSITION: relative; DISPLAY: none; HEIGHT: 4px
+}
+.box-diamond .mytaobao-rc-bt {
+	POSITION: relative; DISPLAY: none; HEIGHT: 4px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-bt {
+	POSITION: relative; DISPLAY: none; HEIGHT: 4px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-tp {
+	POSITION: relative; DISPLAY: none; HEIGHT: 4px
+}
+.box-diamond-white .mytaobao-rc-tp {
+	POSITION: relative; DISPLAY: none; HEIGHT: 4px
+}
+.box-diamond-white .mytaobao-rc-bt {
+	POSITION: relative; DISPLAY: none; HEIGHT: 4px
+}
+.box-sullen .mytaobao-rc-tp SPAN {
+	WIDTH: 4px; FLOAT: right; HEIGHT: 4px
+}
+.box-sullen .mytaobao-rc-bt SPAN {
+	WIDTH: 4px; FLOAT: right; HEIGHT: 4px
+}
+.box-diamond .mytaobao-rc-tp SPAN {
+	WIDTH: 4px; FLOAT: right; HEIGHT: 4px
+}
+.box-diamond .mytaobao-rc-bt SPAN {
+	WIDTH: 4px; FLOAT: right; HEIGHT: 4px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-bt SPAN {
+	WIDTH: 4px; FLOAT: right; HEIGHT: 4px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-tp SPAN {
+	WIDTH: 4px; FLOAT: right; HEIGHT: 4px
+}
+.box-diamond-white .mytaobao-rc-tp SPAN {
+	WIDTH: 4px; FLOAT: right; HEIGHT: 4px
+}
+.box-diamond-white .mytaobao-rc-bt SPAN {
+	WIDTH: 4px; FLOAT: right; HEIGHT: 4px
+}
+.box-sullen .mytaobao-rc-tp {
+	MARGIN-BOTTOM: -4px
+}
+.box-diamond .mytaobao-rc-tp {
+	MARGIN-BOTTOM: -4px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-tp {
+	MARGIN-BOTTOM: -4px
+}
+.box-diamond-white .mytaobao-rc-tp {
+	MARGIN-BOTTOM: -4px
+}
+.box-sullen .mytaobao-rc-bt {
+	MARGIN-TOP: -4px
+}
+.box-diamond .mytaobao-rc-bt {
+	MARGIN-TOP: -4px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-bt {
+	MARGIN-TOP: -4px
+}
+.box-diamond-white .mytaobao-rc-bt {
+	MARGIN-TOP: -4px
+}
+.box-sullen .mytaobao-rc-bt SPAN {
+	BACKGROUND-POSITION: 0px -3px
+}
+.box-diamond .mytaobao-rc-bt SPAN {
+	BACKGROUND-POSITION: 0px -3px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-bt SPAN {
+	BACKGROUND-POSITION: 0px -3px
+}
+.box-diamond-white .mytaobao-rc-bt SPAN {
+	BACKGROUND-POSITION: 0px -3px
+}
+#mytaobao-panel .main-wrap .main-content {
+	PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; PADDING-TOP: 10px
+}
+.box-diamond .mytaobao-bd {
+	PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; PADDING-TOP: 10px
+}
+.box-diamond-white .mytaobao-bd {
+	PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; PADDING-TOP: 10px
+}
+.box-sullen .mytaobao-bd {
+	PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; PADDING-TOP: 10px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-tp {
+	BACKGROUND-POSITION: -5px 0px
+}
+.box-diamond-white .mytaobao-rc-tp {
+	BACKGROUND-POSITION: -5px 0px
+}
+.box-diamond .mytaobao-rc-tp {
+	BACKGROUND-POSITION: -5px 0px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-tp SPAN {
+	BACKGROUND-POSITION: 0px 0px
+}
+.box-diamond-white .mytaobao-rc-tp SPAN {
+	BACKGROUND-POSITION: 0px 0px
+}
+.box-diamond .mytaobao-rc-tp SPAN {
+	BACKGROUND-POSITION: 0px 0px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-bt {
+	BACKGROUND-POSITION: -5px -6px
+}
+.box-diamond-white .mytaobao-rc-bt {
+	BACKGROUND-POSITION: -5px -6px
+}
+.box-diamond .mytaobao-rc-bt {
+	BACKGROUND-POSITION: -5px -6px
+}
+#mytaobao-panel .main-wrap .mytaobao-rc-bt SPAN {
+	BACKGROUND-POSITION: -1px -6px
+}
+.box-diamond-white .mytaobao-rc-bt SPAN {
+	BACKGROUND-POSITION: -1px -6px
+}
+.box-diamond .mytaobao-rc-bt SPAN {
+	BACKGROUND-POSITION: -1px -6px
+}
+#mytaobao-panel .main-wrap #main-content {
+	BORDER-BOTTOM: #c4d5e0 1px solid; BORDER-LEFT: #c4d5e0 1px solid; BACKGROUND-COLOR: #fff; BORDER-TOP: #c4d5e0 1px solid; BORDER-RIGHT: #c4d5e0 1px solid
+}
+.box-diamond .mytaobao-bd {
+	BORDER-BOTTOM: #c4d5e0 1px solid; BORDER-LEFT: #c4d5e0 1px solid; BACKGROUND-COLOR: #fff; BORDER-TOP: #c4d5e0 1px solid; BORDER-RIGHT: #c4d5e0 1px solid
+}
+.box-diamond-white .mytaobao-bd {
+	BORDER-BOTTOM: #c4d5e0 1px solid; BORDER-LEFT: #c4d5e0 1px solid; BACKGROUND-COLOR: #fff; BORDER-TOP: #c4d5e0 1px solid; BORDER-RIGHT: #c4d5e0 1px solid
+}
+#mytaobao-panel .main-wrap #main-content {
+	BACKGROUND-COLOR: #fff
+}
+.box-diamond-white .mytaobao-bd {
+	BACKGROUND-COLOR: #fff
+}
+.box-sullen .mytaobao-bd {
+	BORDER-BOTTOM-COLOR: #f1f1f1; BACKGROUND-COLOR: #f1f1f1; BORDER-TOP-COLOR: #f1f1f1; BORDER-RIGHT-COLOR: #f1f1f1; BORDER-LEFT-COLOR: #f1f1f1
+}
+.box-sullen .mytaobao-rc-tp {
+	BACKGROUND-POSITION: -5px -15px
+}
+.box-sullen .mytaobao-rc-tp SPAN {
+	BACKGROUND-POSITION: 0px -15px
+}
+.box-sullen .mytaobao-rc-bt {
+	BACKGROUND-POSITION: -5px -21px
+}
+.box-sullen .mytaobao-rc-bt SPAN {
+	BACKGROUND-POSITION: 0px -21px
+}
+.sys-taojianghu #topnav {
+	BACKGROUND-POSITION: right -484px
+}
+.sys-taojianghu #topnav UL {
+	BACKGROUND-POSITION: left -334px
+}
+.sys-taojianghu #topnav .guid LI {
+	BORDER-BOTTOM-COLOR: #ffe6b0; BORDER-TOP-COLOR: #ffe6b0; BORDER-RIGHT-COLOR: #ffe6b0; BORDER-LEFT-COLOR: #ffe6b0
+}
+.sys-taojianghu #topnav .guid LI.selected {
+	BACKGROUND-POSITION: 0px -410px
+}
+.sys-taojianghu #topnav .guid LI SPAN {
+	COLOR: #333
+}
+.sys-taojianghu #topnav .guid LI A {
+	COLOR: #333
+}
+.sys-taojianghu #topnav .guid LI.selected SPAN {
+	COLOR: #fff
+}
+.sys-taojianghu #topnav .guid LI.selected A {
+	COLOR: #fff
+}
+.sys-taojianghu #topnav .switch-oldver {
+	BACKGROUND-POSITION: -863px -580px
+}
+.sys-taojianghu #topnav .switch-oldver {
+	DISPLAY: none
+}
+.sys-taojianghu #topnav .quick-links {
+	RIGHT: 10px
+}
+.sec-tab {
+	ZOOM: 1; BACKGROUND: url(mytaobao_v4_bg.png) #fff repeat-x center -299px; HEIGHT: 22px; BORDER-TOP: #c4d5e0 1px solid
+}
+
+#baobei-list .item-container:after {
+	DISPLAY: block; HEIGHT: 0px; CLEAR: both; CONTENT: ' '
+}
+.faq-list:after {
+	DISPLAY: block; HEIGHT: 0px; CLEAR: both; CONTENT: ' '
+}
+.sec-tab:after {
+	DISPLAY: block; HEIGHT: 0px; CLEAR: both; CONTENT: ' '
+}
+.mytaobao-notice .sec UL:after {
+	DISPLAY: block; HEIGHT: 0px; CLEAR: both; CONTENT: ' '
+}
+.sec-tab LI {
+	POSITION: relative; PADDING-BOTTOM: 0px; MARGIN: 0px 5px 0px 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 5px; BACKGROUND-POSITION: right -30px; FLOAT: left; HEIGHT: 22px; PADDING-TOP: 0px
+}
+.sec-tab LI A {
+	PADDING-BOTTOM: 0px; LINE-HEIGHT: 24px; PADDING-LEFT: 5px; PADDING-RIGHT: 0px; DISPLAY: block; BACKGROUND-POSITION: 0px 2px; FLOAT: left; HEIGHT: 22px; CURSOR: default; PADDING-TOP: 0px
+}
+.sec-tab LI A:hover {
+	TEXT-DECORATION: none
+}
+.sec-tab LI A SPAN {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 5px; PADDING-RIGHT: 5px; COLOR: #404040; FONT-SIZE: 12px; PADDING-TOP: 0px
+}
+.sec-tab LI .arrow {
+	POSITION: absolute; WIDTH: 7px; BOTTOM: -2px; BACKGROUND-POSITION: -163px -49px; HEIGHT: 5px; VISIBILITY: hidden; FONT-SIZE: 0px; LEFT: 45%
+}
+.sec-tab LI.selected {
+	BACKGROUND-POSITION: right -92px
+}
+.sec-tab LI.selected A {
+	LINE-HEIGHT: 22px; BACKGROUND-POSITION: 0px -61px
+}
+.sec-tab LI.selected A SPAN {
+	FONT-WEIGHT: bold
+}
+.sec-tab LI.selected .arrow {
+	BACKGROUND-POSITION: -165px -111px; VISIBILITY: visible
+}
+.mytaobao-list {
+	MARGIN-LEFT: 12px
+}
+.mytaobao-list LI {
+	MARGIN: 2px 0px
+}
+.mytaobao-list LI.line {
+	MARGIN: 4px 0px; HEIGHT: 0px; OVERFLOW: hidden; BORDER-TOP: #e6eff4 1px dashed
+}
+#Content #nav-crumbs {
+	DISPLAY: none
+}
+#content #nav-crumbs {
+	DISPLAY: none
+}
+#page #Content {
+	MARGIN: 0px auto
+}
+.dialog_switch_older .bd .acts .mainBtn {
+	BACKGROUND-IMAGE: url(T1bWhyXhhhXXXXXXXX-178-64.gif); BACKGROUND-REPEAT: no-repeat
+}
+.dialog_switch_older .bd .acts .subBtn {
+	BACKGROUND-IMAGE: url(T1bWhyXhhhXXXXXXXX-178-64.gif); BACKGROUND-REPEAT: no-repeat
+}
+.dialog_switch_older .hd {
+	BACKGROUND-IMAGE: url(T1bWhyXhhhXXXXXXXX-178-64.gif); BACKGROUND-REPEAT: no-repeat
+}
+.dialog_switch_older .ft .act {
+	BACKGROUND-IMAGE: url(T1bWhyXhhhXXXXXXXX-178-64.gif); BACKGROUND-REPEAT: no-repeat
+}
+.dialog_switch_older {
+	Z-INDEX: 100000; BORDER-BOTTOM: #b2d1ff 1px solid; POSITION: absolute; BORDER-LEFT: #b2d1ff 1px solid; BACKGROUND-COLOR: #e4f0ff; WIDTH: 400px; DISPLAY: none; BORDER-TOP: #b2d1ff 1px solid; TOP: 100px; BORDER-RIGHT: #b2d1ff 1px solid; LEFT: 50px
+}
+.dialog_switch_older .hd {
+	BORDER-BOTTOM: #bde1f1 1px solid; BACKGROUND-COLOR: #e8f7fc; BACKGROUND-REPEAT: repeat-x; BACKGROUND-POSITION: 0px -25px
+}
+.dialog_switch_older .hd H3 {
+	LINE-HEIGHT: 22px; PADDING-LEFT: 10px; HEIGHT: 22px; FONT-SIZE: 12px
+}
+.dialog_switch_older .bd {
+	PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; BACKGROUND: #f1f9fb; PADDING-TOP: 10px
+}
+.dialog_switch_older .ft .act {
+	POSITION: absolute; LINE-HEIGHT: 17px; TEXT-INDENT: -9999px; OUTLINE-STYLE: none; WIDTH: 17px; DISPLAY: inline-block; BACKGROUND-POSITION: 0px -47px; HEIGHT: 17px; TOP: 3px; RIGHT: 3px
+}
+.dialog_switch_older .bd .acts {
+	MARGIN: 10px 0px
+}
+.dialog_switch_older .bd .acts .mainBtn {
+	BORDER-BOTTOM-STYLE: none; TEXT-ALIGN: center; LINE-HEIGHT: 25px; BORDER-RIGHT-STYLE: none; WIDTH: 89px; DISPLAY: inline-block; BORDER-TOP-STYLE: none; HEIGHT: 25px; COLOR: #000; FONT-SIZE: 14px; BORDER-LEFT-STYLE: none; MARGIN-RIGHT: 10px
+}
+.dialog_switch_older .bd .acts .subBtn {
+	BORDER-BOTTOM-STYLE: none; TEXT-ALIGN: center; LINE-HEIGHT: 25px; BORDER-RIGHT-STYLE: none; WIDTH: 89px; DISPLAY: inline-block; BORDER-TOP-STYLE: none; HEIGHT: 25px; COLOR: #000; FONT-SIZE: 14px; BORDER-LEFT-STYLE: none; MARGIN-RIGHT: 10px
+}
+.dialog_switch_older .bd .acts .subBtn {
+	BACKGROUND-POSITION: 0px 0px
+}
+.dialog_switch_older .bd .acts .mainBtn {
+	BACKGROUND-POSITION: -89px 0px; FONT-WEIGHT: bold
+}
+.dialog_switch_older .bd .msg {
+	FONT-SIZE: 14px
+}
+.dialog_switch_older .bd UL {
+	MARGIN: 10px 0px
+}
+.dialog_switch_older UL LI {
+	LIST-STYLE-POSITION: inside; LIST-STYLE-TYPE: disc
+}
+.bgifm {
+	Z-INDEX: 99999; BORDER-BOTTOM: 0px; POSITION: absolute; FILTER: Alpha(opacity=50); BORDER-LEFT: 0px; WIDTH: 100%; BACKGROUND: #000; BORDER-TOP: 0px; TOP: 0px; BORDER-RIGHT: 0px; LEFT: 0px; opacity: .5
+}
+IFRAME.bgifm {
+	FILTER: Alpha(opacity=0); opacity: 0
+}
+.grid-c3 .col-sub {
+	WIDTH: 150px
+}
+#TB_content .grid-c2 .col-sub {
+	WIDTH: 150px
+}
+#main-body #mytaobao-panel .sidebar {
+	WIDTH: 150px
+}
+.grid-c3 .col-main .main-wrap {
+	DISPLAY: block; MARGIN-LEFT: 160px
+}
+#TB_content .grid-c2 .col-main .main-wrap {
+	DISPLAY: block; MARGIN-LEFT: 160px
+}
+#main-body #mytaobao-panel .main {
+	BORDER-BOTTOM: #c4d5e0 1px solid; BORDER-LEFT: #c4d5e0 1px solid; WIDTH: 788px; BORDER-TOP: #c4d5e0 1px solid; BORDER-RIGHT: #c4d5e0 1px solid; LEFT: 160px; _width: 790px
+}
+#main-body #mytaobao-panel .main .tp IMG {
+	DISPLAY: none
+}
+#main-body #mytaobao-panel .main .bt IMG {
+	DISPLAY: none
+}
+.col-main .main-wrap .chapter {
+	WIDTH: auto
+}
+
+#topnav .quick-links .add A {
+	BACKGROUND: url(mytaobao_v4_bg.png) no-repeat 2000px 2000px
+}
+#topnav {
+	BACKGROUND: url(mytaobao_v4_bg.png) no-repeat 2000px 2000px
+}
+#topnav .guid {
+	BACKGROUND: url(mytaobao_v4_bg.png) no-repeat 2000px 2000px
+}
+#topnav .guid LI.selected {
+	BACKGROUND: url(mytaobao_v4_bg.png) no-repeat 2000px 2000px
+}
+#topnav .guid LI.selected A {
+	BACKGROUND: url(mytaobao_v4_bg.png) no-repeat 2000px 2000px
+}
+#topnav .switch-oldver {
+	BACKGROUND: url(mytaobao_v4_bg.png) no-repeat 2000px 2000px
+}
+#topnav {
+	BORDER-BOTTOM: #4388ce 3px solid; POSITION: relative; BACKGROUND-COLOR: #4588ce; MARGIN: 5px 0px 10px; ZOOM: 1; BACKGROUND-REPEAT: repeat-x; BACKGROUND-POSITION: right -222px; OVERFLOW: hidden
+}
+#topnav:after {
+	DISPLAY: block; HEIGHT: 0px; CLEAR: both; CONTENT: ' '
+}
+#topnav .guid {
+	BACKGROUND-COLOR: #fff; WIDTH: 600px; ZOOM: 1; BACKGROUND-POSITION: 0px -251px; HEIGHT: 28px
+}
+#topnav .guid LI {
+	POSITION: relative; PADDING-BOTTOM: 1px; LINE-HEIGHT: 27px; FLOAT: left; HEIGHT: 27px
+}
+#topnav .guid LI A {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 15px; PADDING-RIGHT: 15px; DISPLAY: block; COLOR: #404040; FONT-WEIGHT: bold; PADDING-TOP: 0px
+}
+#topnav .guid LI A:hover {
+	TEXT-DECORATION: none
+}
+#topnav .guid LI EM {
+	COLOR: #f60; FONT-WEIGHT: normal
+}
+#topnav .guid LI.selected {
+	BORDER-BOTTOM-STYLE: none; BORDER-RIGHT-STYLE: none; BACKGROUND-REPEAT: repeat-x; BACKGROUND-POSITION: 0px 0px; BORDER-TOP-STYLE: none; COLOR: #fff; BORDER-LEFT-STYLE: none
+}
+#topnav .guid LI.selected A {
+	BORDER-BOTTOM-STYLE: none; BORDER-RIGHT-STYLE: none; BACKGROUND-REPEAT: no-repeat; BACKGROUND-POSITION: right -50px; BORDER-TOP-STYLE: none; BORDER-LEFT-STYLE: none
+}
+#topnav .guid LI.selected A {
+	COLOR: #fff
+}
+#topnav .guid LI.selected SPAN {
+	COLOR: #fff
+}
+#topnav .quick-links {
+	POSITION: absolute; ZOOM: 1; OVERFLOW: hidden; TOP: 7px; RIGHT: 100px
+}
+#topnav .quick-links LI {
+	MARGIN: 0px 0px 0px 15px; FLOAT: left
+}
+#topnav .quick-links A {
+	COLOR: #333
+}
+#topnav .quick-links .add A {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 16px; PADDING-RIGHT: 0px; BACKGROUND-POSITION: -940px -547px; PADDING-TOP: 0px
+}
+#topnav .switch-oldver {
+	POSITION: absolute; LINE-HEIGHT: 28px; WIDTH: 73px; HEIGHT: 28px; COLOR: #404040; TOP: 0px; RIGHT: 0px
+}

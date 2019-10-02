@@ -1,0 +1,70 @@
+	body{font-size:14px;margin:0px;}
+	td {font-family: ËÎÌו; font-size: 14px;word-break:break-all;}
+	a:link {color: #039; text-decoration: none}
+	a:visited {color: #039; text-decoration: none}
+	a:hover {color: #277c63; text-decoration: none}
+	a:active {color: #f00; text-decoration: none}
+	a.tilte:link {color: #f60; font-size: 14px; text-decoration: none}
+	a.tilte:visited {color: #f60; font-size: 14px; text-decoration: none}
+	a.tilte:hover {color: #f60; font-size: 14px; text-decoration: none}
+
+
+.main_title{color: #222222;font-weight:bold;font-size: 14px;text-decoration:none}
+
+
+
+.main_faq{color: #333333;font-size: 12px;text-decoration:none}
+.main_faq:link{color: #333333;font-size: 12px;text-decoration:none}
+.main_faq:visited{color: #333333;font-size: 12px;text-decoration:none}
+.main_faq:hover {color: #ff3333;font-size: 12px;text-decoration:none}
+
+.right_1{color: #666;font-size: 14px;text-decoration:none}
+.right_1:link{color: #666;font-size: 14px;text-decoration:none}
+.right_1:visited{color: #666;font-size: 14px;text-decoration:none}
+.right_1:hover {color: #c00;font-size: 14px;text-decoration:none}
+
+
+.category_main_new{color: #039;font-weight:bold;font-size: 14px;text-decoration:none}
+.category_main_new:link{color: #039;font-weight:bold;font-size: 14px;text-decoration:none}
+.category_main_new:visited{color: #039;font-weight:bold;font-size: 14px;text-decoration:none}
+.category_main_new:hover {color: #039;font-weight:bold;font-size: 14px;text-decoration:none}
+
+
+
+.category_blue{color: #444;font-size: 14px;text-decoration:none;}
+.category_blue:link{color: #444;font-size: 14px;text-decoration:none;}
+.category_blue:visited{color: #444;font-size: 14px;text-decoration:none;}
+.category_blue:hover {color: #c00;font-size: 14px;text-decoration:none;}
+
+
+.category_red{color: #039;font-size: 14px;text-decoration:underline;}
+.category_red:link{color: #039;font-size: 14px;text-decoration:underline;}
+.category_red:visited{color: #039;font-size: 14px;text-decoration:underline;}
+.category_red:hover {color: #039;font-size: 14px;text-decoration:underline;}
+
+.service_gray{color: #555;font-size: 14px;text-decoration:underline;}
+.service_gray:link{color: #555;font-size: 14px;text-decoration:underline;}
+.service_gray:visited{color: #555;font-size: 14px;text-decoration:underline;}
+.service_gray:hover {color: #555;font-size: 14px;text-decoration:underline;}
+
+
+.category_main_green{color: #009900;font-weight:bold;font-size: 14px;text-decoration:underline}
+.category_main_green:link{color: #009900;font-weight:bold;font-size: 14px;text-decoration:underline}
+.category_main_green:visited{color: #009900;font-weight:bold;font-size: 14px;text-decoration:underline}
+.category_main_green:hover {color: #009900;font-weight:bold;font-size: 14px;text-decoration:underline}
+
+
+.service_green{color: #009900;font-size: 14px;text-decoration:underline;}
+.service_green:link{color: #009900;font-size: 14px;text-decoration:underline;}
+.service_green:visited{color: #009900;font-size: 14px;text-decoration:underline;}
+.service_green:hover {color: #009900;font-size: 14px;text-decoration:underline;}
+
+input {
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif";
+	font-size: 14px;
+}
+select {
+	font-family: "Verdana", "Arial", "Helvetica", "sans-serif";
+	font-size: 14px;
+}
+

@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC
+        "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.3.0//EN"
+        "http://jakarta.apache.org/commons/dtds/validator_1_3_0.dtd">
+
+<form-validation>
+    <global>
+        <constant>
+            <constant-name>phone</constant-name>
+            <constant-value>^\(?(\d{3})\)?[-| ]?(\d{3})[-| ]?(\d{4})$</constant-value>
+        </constant>
+        <constant>
+            <constant-name>zip</constant-name>
+            <constant-value>^\d{5}\d*$</constant-value>
+        </constant>
+        <constant>
+            <constant-name>currency</constant-name>
+            <constant-value>^\d{1,3}(,?\d{1,3})*\.?(\d{1,2})?$</constant-value>
+        </constant>
+    </global>
+    <formset>
+        <form name="fileUpload">
+            <field property="name" depends="required">
+                <arg key="uploadForm.name"/>
+            </field>
+            <!-- Client-side Javascript won't catch this in IE, but server-side will -->
+            <field property="file" depends="required">
+                <arg key="uploadForm.file"/>
+            </field>
+        </form>
+        <form name="user">
+            <field property="username" depends="required">
+                <arg key="user.username"/>
+            </field>
+            <field property="password" depends="required,twofields">
+                <msg name="twofields" key="errors.twofields"/>
+                <arg key="user.password"/>
+                <arg key="user.confirmPassword" position="1"/>
+                <var>
+                    <var-name>secondProperty</var-name>
+                    <var-value>confirmPassword</var-value>
+                </var>
+            </field>
+            <field property="confirmPassword" depends="required">
+                <arg key="user.confirmPassword"/>
+            </field>
+            <field property="firstName" depends="required">
+                <arg key="user.firstName"/>
+            </field>
+            <field property="lastName" depends="required">
+                <arg key="user.lastName"/>
+            </field>
+            <field property="email" depends="required,email">
+                <arg key="user.email"/>
+            </field>
+            <field property="passwordHint" depends="required">
+                <arg key="user.passwordHint"/>
+            </field>
+        </form>
+        
+        
+        
+        
+        <!--JsysUser-START-->
+        <form name="jsysUser">
+            <field property="companyCode" depends="required">
+                <arg key="jsysUser.companyCode"/>
+            </field>
+            <field property="defCharacterCoding" depends="required">
+                <arg key="jsysUser.defCharacterCoding"/>
+            </field>
+            <field property="password" depends="required">
+                <arg key="jsysUser.password"/>
+            </field>
+            <field property="state" depends="required">
+                <arg key="jsysUser.state"/>
+            </field>
+            <field property="userName" depends="required">
+                <arg key="jsysUser.userName"/>
+            </field>
+            <field property="userType" depends="required">
+                <arg key="jsysUser.userType"/>
+            </field>
+        </form>
+        <!--JsysUser-END-->
+        <!--JsysRole-START-->
+        <form name="jsysRole">
+            <field property="available" depends="required">
+                <arg key="jsysRole.available"/>
+            </field>
+            <field property="companyCode" depends="required">
+                <arg key="jsysRole.companyCode"/>
+            </field>
+            <field property="roleCode" depends="required">
+                <arg key="jsysRole.roleCode"/>
+            </field>
+            <field property="roleName" depends="required">
+                <arg key="jsysRole.roleName"/>
+            </field>
+            <field property="userType" depends="required">
+                <arg key="jsysRole.userType"/>
+            </field>
+        </form>
+        <!--JsysRole-END-->
+        <!--JsysResource-START-->
+        <form name="jsysResource">
+            <field property="parentId" depends="required">
+                <arg key="jsysResource.parentId"/>
+            </field>
+            <field property="resType" depends="required">
+                <arg key="jsysResource.resType"/>
+            </field>
+            <field property="sysType" depends="required">
+                <arg key="jsysResource.sysType"/>
+            </field>
+        </form>
+        <!--JsysResource-END-->
+        <!--JalCharacterKey-START-->
+        <form name="jalCharacterKey">
+        </form>
+        <!--JalCharacterKey-END-->
+        <!--JalCharacterCoding-START-->
+        <form name="jalCharacterCoding">
+        </form>
+        <!--JalCharacterCoding-END-->
+        <!--JalCharacterValue-START-->
+        <form name="jalCharacterValue">
+        </form>
+        <!--JalCharacterValue-END-->
+        
+        <!--JsysListKey-START-->
+        <form name="jsysListKey">
+            <field property="listCode" depends="required">
+                <arg key="jsysListKey.listCode"/>
+            </field>
+            <field property="listName" depends="required">
+                <arg key="jsysListKey.listName"/>
+            </field>
+        </form>
+        <!--JsysListKey-END-->
+        <!--JsysListValue-START-->
+        <form name="jsysListValue">
+            <field property="valueCode" depends="required">
+                <arg key="jsysListValue.valueCode"/>
+            </field>
+            <field property="valueTitle" depends="required">
+                <arg key="jsysListValue.valueTitle"/>
+            </field>
+        </form>
+        <!--JsysListValue-END-->
+        <!--JsysConfigKey-START-->
+        <form name="jsysConfigKey">
+            <field property="configCode" depends="required">
+                <arg key="jsysConfigKey.configCode"/>
+            </field>
+        </form>
+        <!--JsysConfigKey-END-->
+        <!--JsysConfigValue-START-->
+        <form name="jsysConfigValue">
+            <field property="companyCode" depends="required">
+                <arg key="jsysConfigValue.companyCode"/>
+            </field>
+        </form>
+        <!--JsysConfigValue-END-->
+        <!--JalCompany-START-->
+        <form name="jalCompany">
+            <field property="characterCode" depends="required">
+                <arg key="jalCompany.characterCode"/>
+            </field>
+            <field property="companyCode" depends="required">
+                <arg key="jalCompany.companyCode"/>
+            </field>
+            <field property="companyName" depends="required">
+                <arg key="jalCompany.companyName"/>
+            </field>
+        </form>
+        <!--JalCompany-END-->
+        <!--JmiMember-START-->
+        <form name="jmiMember">
+            <field property="active" depends="required">
+                <arg key="jmiMember.active"/>
+            </field>
+            <field property="linkNo" depends="required">
+                <arg key="jmiMember.linkNo"/>
+            </field>
+            <field property="recommendNo" depends="required">
+                <arg key="jmiMember.recommendNo"/>
+            </field>
+        </form>
+        <!--JmiMember-END-->
+        <!--JpoMemberOrder-START-->
+        <form name="jpoMemberOrder">
+            <field property="userCode" depends="required">
+                <arg key="jpoMemberOrder.userCode"/>
+            </field>
+        </form>
+        <!--JpoMemberOrder-END-->
+        <!--JpoShoppingCartOrder-START-->
+        <form name="jpoShoppingCartOrder">
+            <field property="orderType" depends="required">
+                <arg key="jpoShoppingCartOrder.orderType"/>
+            </field>
+        </form>
+        <!--JpoShoppingCartOrder-END-->
+        <!--JpoShoppingCartOrderList-START-->
+        <form name="jpoShoppingCartOrderList">
+            <field property="productId" depends="required">
+                <arg key="jpoShoppingCartOrderList.productId"/>
+            </field>
+            <field property="qty" depends="required">
+                <arg key="jpoShoppingCartOrderList.qty"/>
+            </field>
+        </form>
+        <!--JpoShoppingCartOrderList-END-->
+
+        <!--JfiBankbookBalance-START-->
+        <form name="jfiBankbookBalance">
+            <field property="balance" depends="required">
+                <arg key="jfiBankbookBalance.balance"/>
+            </field>
+        </form>
+        <!--JfiBankbookBalance-END-->
+        <!--JfiBankbookTemp-START-->
+        <form name="jfiBankbookTemp">
+            <field property="companyCode" depends="required">
+                <arg key="jfiBankbookTemp.companyCode"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="jfiBankbookTemp.userCode"/>
+            </field>
+        </form>
+        <!--JfiBankbookTemp-END-->
+        <!--JfiBankbookJournal-START-->
+        <form name="jfiBankbookJournal">
+            <field property="companyCode" depends="required">
+                <arg key="jfiBankbookJournal.companyCode"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="jfiBankbookJournal.userCode"/>
+            </field>
+        </form>
+        <!--JfiBankbookJournal-END-->
+        <!--FiTransferAccount-START-->
+        <form name="fiTransferAccount">
+            <field property="destinationUserCode" depends="required">
+                <arg key="fiTransferAccount.destinationUserCode"/>
+            </field>
+            <field property="transferUserCode" depends="required">
+                <arg key="fiTransferAccount.transferUserCode"/>
+            </field>
+        </form>
+        <!--FiTransferAccount-END-->
+        <!--JalCountry-START-->
+        <form name="jalCountry">
+            <field property="countryCode" depends="required">
+                <arg key="jalCountry.countryCode"/>
+            </field>
+            <field property="countryName" depends="required">
+                <arg key="jalCountry.countryName"/>
+            </field>
+        </form>
+        <!--JalCountry-END-->
+        
+
+        
+         <!--JpmProductSaleImage-START-->
+        <form name="jpmProductSaleImage">
+        </form>
+        <!--JpmProductSaleImage-END-->
+        <!--JpmProductSaleNew-START-->
+        <form name="jpmProductSaleNew">
+        </form>
+        <!--JpmProductSaleNew-END-->
+        <!--JpmProductSaleRelated-START-->
+        <form name="jpmProductSaleRelated">
+        </form>
+        <!--JpmProductSaleRelated-END-->
+        <!--JpmProductSaleTeamType-START-->
+        <form name="jpmProductSaleTeamType">
+        </form>
+        <!--JpmProductSaleTeamType-END-->
+          <!--AmMessage-START-->
+        <form name="amMessage">
+            <field property="companyCode" depends="required">
+                <arg key="amMessage.companyCode"/>
+            </field>
+            <field property="content" depends="required">
+                <arg key="amMessage.content"/>
+            </field>
+            <field property="issueTime" depends="required">
+                <arg key="amMessage.issueTime"/>
+            </field>
+            <field property="msgClassNo" depends="required">
+                <arg key="amMessage.msgClassNo"/>
+            </field>
+            <field property="senderNo" depends="required">
+                <arg key="amMessage.senderNo"/>
+            </field>
+            <field property="subject" depends="required">
+                <arg key="amMessage.subject"/>
+            </field>
+        </form>
+        <!--AmMessage-END-->
+
+        <!--JsysId-START-->
+        <form name="jsysId">
+            <field property="idName" depends="required">
+                <arg key="jsysId.idName"/>
+            </field>
+        </form>
+        <!--JsysId-END-->
+         <!--JpoShippingFee-START-->
+        <form name="jpoShippingFee">
+            <field property="countryCode" depends="required">
+                <arg key="jpoShippingFee.countryCode"/>
+            </field>
+            <field property="createTime" depends="required">
+                <arg key="jpoShippingFee.createTime"/>
+            </field>
+            <field property="shippingFee" depends="required">
+                <arg key="jpoShippingFee.shippingFee"/>
+            </field>
+            <field property="shippingType" depends="required">
+                <arg key="jpoShippingFee.shippingType"/>
+            </field>
+        </form>
+        <!--JpoShippingFee-END-->
+        <!--Jfi99billLog-START-->
+        <form name="jfi99billLog">
+            <field property="companyCode" depends="required">
+                <arg key="jfi99billLog.companyCode"/>
+            </field>
+            <field property="inc" depends="required">
+                <arg key="jfi99billLog.inc"/>
+            </field>
+            <field property="returnMsg" depends="required">
+                <arg key="jfi99billLog.returnMsg"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="jfi99billLog.userCode"/>
+            </field>
+        </form>
+        <!--Jfi99billLog-END-->
+        <!--FiBankbookTemp-START-->
+        <form name="fiBankbookTemp">
+            <field property="bankbookType" depends="required">
+                <arg key="fiBankbookTemp.bankbookType"/>
+            </field>
+            <field property="companyCode" depends="required">
+                <arg key="fiBankbookTemp.companyCode"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="fiBankbookTemp.userCode"/>
+            </field>
+        </form>
+        <!--FiBankbookTemp-END-->
+        <!--FiBankbookJournal-START-->
+        <form name="fiBankbookJournal">
+            <field property="bankbookType" depends="required">
+                <arg key="fiBankbookJournal.bankbookType"/>
+            </field>
+            <field property="companyCode" depends="required">
+                <arg key="fiBankbookJournal.companyCode"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="fiBankbookJournal.userCode"/>
+            </field>
+        </form>
+        <!--FiBankbookJournal-END-->
+        <!--FiBankbookBalance-START-->
+        <form name="fiBankbookBalance">
+            <field property="balance" depends="required">
+                <arg key="fiBankbookBalance.balance"/>
+            </field>
+            <field property="bankbookType" depends="required">
+                <arg key="fiBankbookBalance.bankbookType"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="fiBankbookBalance.userCode"/>
+            </field>
+        </form>
+        <!--FiBankbookBalance-END-->
+        <!--FiBcoinJournal-START-->
+        <form name="fiBcoinJournal">
+            <field property="userCode" depends="required">
+                <arg key="fiBcoinJournal.userCode"/>
+            </field>
+        </form>
+        <!--FiBcoinJournal-END-->
+        <!--FiBcoinBalance-START-->
+        <form name="fiBcoinBalance">
+        </form>
+        <!--FiBcoinBalance-END-->
+         <!--Jfi99billLog-START-->
+        <form name="jfi99billLog">
+            <field property="companyCode" depends="required">
+                <arg key="jfi99billLog.companyCode"/>
+            </field>
+            <field property="inc" depends="required">
+                <arg key="jfi99billLog.inc"/>
+            </field>
+            <field property="returnMsg" depends="required">
+                <arg key="jfi99billLog.returnMsg"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="jfi99billLog.userCode"/>
+            </field>
+        </form>
+        <!--Jfi99billLog-END-->
+        <!--JalFileLibarary-START-->
+        <form name="jalFileLibarary">
+            <field property="name" depends="required">
+                <arg key="jalFileLibarary.name"/>
+            </field>
+            <field property="typeId" depends="required">
+                <arg key="jalFileLibarary.typeId"/>
+            </field>
+        </form>
+        <!--JalFileLibarary-END-->
+        <!--FiCcoinJournal-START-->
+        <form name="fiCcoinJournal">
+            <field property="userCode" depends="required">
+                <arg key="fiCcoinJournal.userCode"/>
+            </field>
+        </form>
+        <!--FiCcoinJournal-END-->
+        <!--FiCcoinBalance-START-->
+        <form name="fiCcoinBalance">
+        </form>
+        <!--FiCcoinBalance-END-->
+        <!--JsysBank-START-->
+        <form name="jsysBank">
+            <field property="bankKey" depends="required">
+                <arg key="jsysBank.bankKey"/>
+            </field>
+            <field property="bankValue" depends="required">
+                <arg key="jsysBank.bankValue"/>
+            </field>
+            <field property="companyCode" depends="required">
+                <arg key="jsysBank.companyCode"/>
+            </field>
+        </form>
+        <!--JsysBank-END-->
+        <!--JsysLoginLog-START-->
+        <form name="jsysLoginLog">
+        </form>
+        <!--JsysLoginLog-END-->
+        <!--JmiMemberUpgradeNote-START-->
+        <form name="jmiMemberUpgradeNote">
+            <field property="companyCode" depends="required">
+                <arg key="jmiMemberUpgradeNote.companyCode"/>
+            </field>
+            <field property="newCard" depends="required">
+                <arg key="jmiMemberUpgradeNote.newCard"/>
+            </field>
+            <field property="oldCard" depends="required">
+                <arg key="jmiMemberUpgradeNote.oldCard"/>
+            </field>
+        </form>
+        <!--JmiMemberUpgradeNote-END-->
+        <!--ScheduleManage-START-->
+        <form name="scheduleManage">
+        </form>
+        <!--ScheduleManage-END-->
+        <!--PublicSchedule-START-->
+        <form name="publicSchedule">
+        </form>
+        <!--PublicSchedule-END-->
+        <!--InwDemand-START-->
+        <form name="inwDemand">
+            <field property="name" depends="required">
+                <arg key="inwDemand.name"/>
+            </field>
+            <field property="summary" depends="required">
+                <arg key="inwDemand.summary"/>
+            </field>
+        </form>
+        <!--InwDemand-END-->
+        <!--InwSuggestion-START-->
+        <form name="inwSuggestion">
+            <field property="demandId" depends="required">
+                <arg key="inwSuggestion.demandId"/>
+            </field>
+        </form>
+        <!--InwSuggestion-END-->
+        <!--FiCoinLog-START-->
+        <form name="fiCoinLog">
+            <field property="coin" depends="required">
+                <arg key="fiCoinLog.coin"/>
+            </field>
+            <field property="coinType" depends="required">
+                <arg key="fiCoinLog.coinType"/>
+            </field>
+            <field property="createTime" depends="required">
+                <arg key="fiCoinLog.createTime"/>
+            </field>
+            <field property="createUser" depends="required">
+                <arg key="fiCoinLog.createUser"/>
+            </field>
+            <field property="dealType" depends="required">
+                <arg key="fiCoinLog.dealType"/>
+            </field>
+            <field property="receiveCoin" depends="required">
+                <arg key="fiCoinLog.receiveCoin"/>
+            </field>
+            <field property="status" depends="required">
+                <arg key="fiCoinLog.status"/>
+            </field>
+            <field property="uniqueCode" depends="required">
+                <arg key="fiCoinLog.uniqueCode"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="fiCoinLog.userCode"/>
+            </field>
+        </form>
+        <!--FiCoinLog-END-->
+        <!--JpmSalePromoter-START-->
+        <form name="jpmSalePromoter">
+            <field property="endtime" depends="required">
+                <arg key="jpmSalePromoter.endtime"/>
+            </field>
+            <field property="startime" depends="required">
+                <arg key="jpmSalePromoter.startime"/>
+            </field>
+        </form>
+        <!--JpmSalePromoter-END-->
+        <!--FoundationItem-START-->
+        <form name="foundationItem">
+            <field property="amount" depends="required">
+                <arg key="foundationItem.amount"/>
+            </field>
+            <field property="name" depends="required">
+                <arg key="foundationItem.name"/>
+            </field>
+            <field property="status" depends="required">
+                <arg key="foundationItem.status"/>
+            </field>
+            <field property="type" depends="required">
+                <arg key="foundationItem.type"/>
+            </field>
+            <field property="unit" depends="required">
+                <arg key="foundationItem.unit"/>
+            </field>
+        </form>
+        <!--FoundationItem-END-->
+        <!--FoundationOrder-START-->
+        <form name="foundationOrder">
+            <field property="fiId" depends="required">
+                <arg key="foundationOrder.fiId"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="foundationOrder.userCode"/>
+            </field>
+        </form>
+        <!--FoundationOrder-END-->
+        <!--FiLovecoinBalance-START-->
+        <form name="fiLovecoinBalance">
+        </form>
+        <!--FiLovecoinBalance-END-->
+        <!--FiLovecoinJournal-START-->
+        <form name="fiLovecoinJournal">
+            <field property="userCode" depends="required">
+                <arg key="fiLovecoinJournal.userCode"/>
+            </field>
+        </form>
+        <!--FiLovecoinJournal-END-->
+        
+        <!--JpmProductWineTemplateSub-START-->
+        <form name="jpmProductWineTemplateSub">
+        </form>
+        <!--JpmProductWineTemplateSub-END-->
+        
+        
+        <!--JpmProductWineTemplate-START-->
+        <form name="jpmProductWineTemplate">
+        </form>
+        <!--JpmProductWineTemplate-END-->
+        <!--JpmWineTemplatePicture-START-->
+        <form name="jpmWineTemplatePicture">
+        </form>
+        <!--JpmWineTemplatePicture-END-->
+
+        <!--JfiPosImport-START-->
+        <form name="jfiPosImport">
+            <field property="PId" depends="required">
+                <arg key="jfiPosImport.PId"/>
+            </field>
+            <field property="amount" depends="required">
+                <arg key="jfiPosImport.amount"/>
+            </field>
+            <field property="createTime" depends="required">
+                <arg key="jfiPosImport.createTime"/>
+            </field>
+            <field property="createUser" depends="required">
+                <arg key="jfiPosImport.createUser"/>
+            </field>
+            <field property="posNo" depends="required">
+                <arg key="jfiPosImport.posNo"/>
+            </field>
+            <field property="status" depends="required">
+                <arg key="jfiPosImport.status"/>
+            </field>
+            <field property="tel" depends="required">
+                <arg key="jfiPosImport.tel"/>
+            </field>
+        </form>
+        <!--JfiPosImport-END-->
+
+        <!--FiSecurityDeposit-START-->
+        <form name="fiSecurityDeposit">
+            <field property="userCode" depends="required">
+                <arg key="fiSecurityDeposit.userCode"/>
+            </field>
+        </form>
+        <!--FiSecurityDeposit-END-->
+
+        <!--JpmConfigSpecDetailed-START-->
+        <form name="jpmConfigSpecDetailed">
+        </form>
+        <!--JpmConfigSpecDetailed-END-->
+        <!--JpmWineOrderInterface-START-->
+        <form name="jpmWineOrderInterface">
+        </form>
+        <!--JpmWineOrderInterface-END-->
+        <!--JpmWineSettingInf-START-->
+        <form name="jpmWineSettingInf">
+        </form>
+        <!--JpmWineSettingInf-END-->
+
+        <!--JpmSendConsignment-START-->
+        <form name="jpmSendConsignment">
+        </form>
+        <!--JpmSendConsignment-END-->
+        <!--FiBillAccount-START-->
+        <form name="fiBillAccount">
+            <field property="accountName" depends="required">
+                <arg key="fiBillAccount.accountName"/>
+            </field>
+            <field property="billAccountPassword" depends="required">
+                <arg key="fiBillAccount.billAccountPassword"/>
+            </field>
+        </form>
+        <!--FiBillAccount-END-->
+        <!--FiBillAccountRelation-START-->
+        <form name="fiBillAccountRelation">
+            <field property="billAccountCode" depends="required">
+                <arg key="fiBillAccountRelation.billAccountCode"/>
+            </field>
+        </form>
+        <!--FiBillAccountRelation-END-->
+        <!--FiGetbillaccountLog-START-->
+        <form name="fiGetbillaccountLog">
+            <field property="userCode" depends="required">
+                <arg key="fiGetbillaccountLog.userCode"/>
+            </field>
+        </form>
+        <!--FiGetbillaccountLog-END-->
+        <!--FiCommonAddr-START-->
+        <form name="fiCommonAddr">
+            <field property="city" depends="required">
+                <arg key="fiCommonAddr.city"/>
+            </field>
+            <field property="province" depends="required">
+                <arg key="fiCommonAddr.province"/>
+            </field>
+        </form>
+        <!--FiCommonAddr-END-->
+        <!--FiFundbookBalance-START-->
+        <form name="fiFundbookBalance">
+            <field property="balance" depends="required">
+                <arg key="fiFundbookBalance.balance"/>
+            </field>
+            <field property="bankbookType" depends="required">
+                <arg key="fiFundbookBalance.bankbookType"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="fiFundbookBalance.userCode"/>
+            </field>
+        </form>
+        <!--FiFundbookBalance-END-->
+        <!--FiFundbookJournal-START-->
+        <form name="fiFundbookJournal">
+            <field property="bankbookType" depends="required">
+                <arg key="fiFundbookJournal.bankbookType"/>
+            </field>
+            <field property="companyCode" depends="required">
+                <arg key="fiFundbookJournal.companyCode"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="fiFundbookJournal.userCode"/>
+            </field>
+        </form>
+        <!--FiFundbookJournal-END-->
+        <!--FiFundbookTemp-START-->
+        <form name="fiFundbookTemp">
+            <field property="bankbookType" depends="required">
+                <arg key="fiFundbookTemp.bankbookType"/>
+            </field>
+            <field property="companyCode" depends="required">
+                <arg key="fiFundbookTemp.companyCode"/>
+            </field>
+            <field property="userCode" depends="required">
+                <arg key="fiFundbookTemp.userCode"/>
+            </field>
+        </form>
+        <!--FiFundbookTemp-END-->
+        <!--FiTransferFundbook-START-->
+        <form name="fiTransferFundbook">
+            <field property="destinationUserCode" depends="required">
+                <arg key="fiTransferFundbook.destinationUserCode"/>
+            </field>
+            <field property="transferUserCode" depends="required">
+                <arg key="fiTransferFundbook.transferUserCode"/>
+            </field>
+        </form>
+        <!--FiTransferFundbook-END-->
+        <!--FiBcoinPayconfig-START-->
+        <form name="fiBcoinPayconfig">
+            <field property="endTime" depends="required">
+                <arg key="fiBcoinPayconfig.endTime"/>
+            </field>
+            <field property="limit" depends="required">
+                <arg key="fiBcoinPayconfig.limit"/>
+            </field>
+            <field property="proportion" depends="required">
+                <arg key="fiBcoinPayconfig.proportion"/>
+            </field>
+            <field property="startTime" depends="required">
+                <arg key="fiBcoinPayconfig.startTime"/>
+            </field>
+            <field property="title" depends="required">
+                <arg key="fiBcoinPayconfig.title"/>
+            </field>
+        </form>
+        <!--FiBcoinPayconfig-END-->
+        <!--FiBcoinPayconfigDetail-START-->
+        <form name="fiBcoinPayconfigDetail">
+            <field property="configId" depends="required">
+                <arg key="fiBcoinPayconfigDetail.configId"/>
+            </field>
+            <field property="productNo" depends="required">
+                <arg key="fiBcoinPayconfigDetail.productNo"/>
+            </field>
+        </form>
+        <!--FiBcoinPayconfigDetail-END-->
+        <!--FiBillAccountWarning-START-->
+        <form name="fiBillAccountWarning">
+            <field property="nowTotalAmount" depends="required">
+                <arg key="fiBillAccountWarning.nowTotalAmount"/>
+            </field>
+        </form>
+        <!--FiBillAccountWarning-END-->
+        <!--PdShUrl-START-->
+        <form name="pdShUrl">
+        </form>
+        <!--PdShUrl-END-->
+        <!--JmiValidLevelList-START-->
+        <form name="jmiValidLevelList">
+        </form>
+        <!--JmiValidLevelList-END-->
+        <!--JmiLevelLock-START-->
+        <form name="jmiLevelLock">
+        </form>
+        <!--JmiLevelLock-END-->
+        <!--FiMovieOrder-START-->
+        <form name="fiMovieOrder">
+        </form>
+        <!--FiMovieOrder-END-->
+        <!--JpoCheckedFailed-START-->
+        <form name="jpoCheckedFailed">
+            <field property="dataType" depends="required">
+                <arg key="jpoCheckedFailed.dataType"/>
+            </field>
+            <field property="moId" depends="required">
+                <arg key="jpoCheckedFailed.moId"/>
+            </field>
+            <field property="operatorSysuser" depends="required">
+                <arg key="jpoCheckedFailed.operatorSysuser"/>
+            </field>
+        </form>
+        <!--JpoCheckedFailed-END-->
+        <!--JmiPrizeTourism-START-->
+        <form name="jmiPrizeTourism">
+        </form>
+        <!--JmiPrizeTourism-END-->
+        <!--JmiMemberLog-START-->
+        <form name="jmiMemberLog">
+        </form>
+        <!--JmiMemberLog-END-->
+		        <!--JbdTravelPointAll-START-->
+        <form name="jbdTravelPointAll">
+        </form>
+        <!--JbdTravelPointAll-END-->
+
+        <!--JmiUserInvestigation-START-->
+        <form name="jmiUserInvestigation">
+        </form>
+        <!--JmiUserInvestigation-END-->
+    </formset>
+</form-validation>
